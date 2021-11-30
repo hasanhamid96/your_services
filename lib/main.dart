@@ -19,7 +19,7 @@ import 'screens/auth/LogScreen.dart';
 import 'screens/auth/startScreen.dart';
 import 'screens/bottomScreens/bottomNavBar.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -41,58 +41,62 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: UserProvider(),),
+        ChangeNotifierProvider.value(
+          value: UserProvider(),
+        ),
         ChangeNotifierProvider.value(value: Sections()),
-        ChangeNotifierProvider.value(value: Bannsers(),),
-        ChangeNotifierProvider.value(value: Persons(),),
-        ChangeNotifierProvider.value(value: PersonWorks(),),
-        ChangeNotifierProvider.value(value: GetSocial(),),
+        ChangeNotifierProvider.value(
+          value: Bannsers(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Persons(),
+        ),
+        ChangeNotifierProvider.value(
+          value: PersonWorks(),
+        ),
+        ChangeNotifierProvider.value(
+          value: GetSocial(),
+        ),
         ChangeNotifierProvider.value(value: Cities()),
       ],
       child: Consumer<UserProvider>(
-     builder: (context, auth, _) =>
-        MaterialApp(
+        builder: (context, auth, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'خدماتك',
           theme: ThemeData(
             // platform: TargetPlatform.iOS,
             primaryColor: CupertinoColors.systemTeal,
             textTheme: TextTheme(
-                bodyText1: TextStyle(
-                  fontSize: 17,
+              bodyText1: TextStyle(
+                fontSize: 17,
+                fontFamily: 'Cairo-Regular',
+                color: Colors.black45,
+              ),
+              bodyText2: TextStyle(
+                  color: CupertinoColors.systemTeal,
+                  fontSize: 15,
                   fontFamily: 'Cairo-Regular',
-                  color: Colors.black45,
-                ),
-                bodyText2: TextStyle(
-                    color: CupertinoColors.systemTeal,
-                    fontSize: 15,
-                    fontFamily: 'Cairo-Regular',
-                    fontWeight: FontWeight.normal
-                ),
-                headline1: TextStyle(
-                    color: CupertinoColors.black,
-                    fontFamily: 'Cairo-Regular',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                ),
-                headline2: TextStyle(
-                    color: CupertinoColors.black,
-                    fontFamily: 'Cairo-Regular',
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                ),
-                headline3: TextStyle(
-                    color: CupertinoColors.white,
-                    fontFamily: 'Cairo-Regular',
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold
-                ),
-                headline4: TextStyle(
-                    color: CupertinoColors.black,
-                    fontFamily: 'Cairo-Regular',
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold
-                ),
+                  fontWeight: FontWeight.normal),
+              headline1: TextStyle(
+                  color: CupertinoColors.black,
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+              headline2: TextStyle(
+                  color: CupertinoColors.black,
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+              headline3: TextStyle(
+                  color: CupertinoColors.white,
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              headline4: TextStyle(
+                  color: CupertinoColors.black,
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
 
             scaffoldBackgroundColor: CupertinoColors.extraLightBackgroundGray,
@@ -103,7 +107,6 @@ class MyApp extends StatelessWidget {
             LogScreen.routeName: (ctx) => LogScreen(),
             StartScreen.routeName: (ctx) => StartScreen(),
           },
-
           onGenerateRoute: (RouteSettings settings) {
             // print('${settings.name} wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
             // switch (settings.name) {
@@ -117,13 +120,16 @@ class MyApp extends StatelessWidget {
                 builder: (context) => BottomNavBar(), settings: settings);
           },
           home: FutureBuilder(
-           future: auth.checkLogin(),
-            builder: (ctx, authResultSnapshot) {
-             if(!authResultSnapshot.hasData)
-               Scaffold(body: Center(child: CupertinoActivityIndicator(),),);
-             return SplashScreen();
-           }
-             ),
+              future: auth.checkLogin(),
+              builder: (ctx, authResultSnapshot) {
+                if (!authResultSnapshot.hasData)
+                  Scaffold(
+                    body: Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  );
+                return SplashScreen();
+              }),
         ),
       ),
     );
@@ -148,21 +154,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> initializePlayer() async {
-    _controller = VideoPlayerController.asset(
-        'assets/images/sss.mp4');
+    _controller = VideoPlayerController.asset('assets/images/sss.mp4');
     await Future.wait([
-      _controller.initialize().then((value) =>
-          _controller.addListener(() {                       //custom Listner
+      _controller.initialize().then((value) => _controller.addListener(() {
+            //custom Listner
             setState(() {
-              if (_controller.value.duration ==_controller.value.position) {
-                print('video compeleteeed');//checking the duration and position every time
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) =>UserProvider.token==null? StartScreen():BottomNavBar(),));
+              if (_controller.value.duration == _controller.value.position) {
+                print(
+                    'video compeleteeed'); //checking the duration and position every time
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => UserProvider.token == null
+                      ? StartScreen()
+                      : BottomNavBar(),
+                ));
                 setState(() {});
               }
             });
-          })
-      ),
+          })),
     ]);
     _createChewieController();
     setState(() {});
@@ -170,11 +178,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _createChewieController() {
     _chewieController = ChewieController(
-      videoPlayerController: _controller,
-      autoPlay: true,
-      looping: false,
-      showControls:false
-    );
+        videoPlayerController: _controller,
+        autoPlay: true,
+        looping: false,
+        showControls: false);
   }
 
   @override
@@ -186,62 +193,67 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
-      child:Container(
-        height: MediaQuery.of(context).size.height*2,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              top: 0,
-              bottom: -30,
-              left: -30,
-              right: -30,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child:   _chewieController != null &&
-                    _chewieController
-                        .videoPlayerController.value.initialized
-                    ? Chewie(
-                  controller: _chewieController,
-                )
-                    : Scaffold(
-                      body: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                      Center(child: CircularProgressIndicator()),
-                      SizedBox(height: 20),
-                      Text('Loading'),
-                  ],
+        color: Colors.transparent,
+        child: Container(
+          height: MediaQuery.of(context).size.height * 2,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                top: 0,
+                bottom: -30,
+                left: -30,
+                right: -30,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: _chewieController != null &&
+                          _chewieController
+                              .videoPlayerController.value.isInitialized
+                      ? Chewie(
+                          controller: _chewieController,
+                        )
+                      : Scaffold(
+                          body: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Center(child: CircularProgressIndicator()),
+                              SizedBox(height: 20),
+                              Text('Loading'),
+                            ],
+                          ),
+                        ),
                 ),
-                    ),
               ),
-            ),
-            Positioned(
-              bottom: 5,
-              right: 5,
-              child: OutlineButton(
-                borderSide:   BorderSide(
-                  width: 1.0,
+              Positioned(
+                bottom: 5,
+                right: 5,
+                child: OutlineButton(
+                  borderSide: BorderSide(
+                    width: 1.0,
+                    color: Colors.white,
+                    style: BorderStyle.solid,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   color: Colors.white,
-                  style: BorderStyle.solid,
+                  disabledBorderColor: Colors.white,
+                  highlightedBorderColor: Colors.white,
+                  onPressed: () {
+                    // Navigator.of(context).pushReplacementNamed('ss');
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => UserProvider.token == null
+                          ? StartScreen()
+                          : BottomNavBar(),
+                    ));
+                  },
+                  child: Text(
+                    'تخطي',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                color: Colors.white,
-                disabledBorderColor:Colors.white,
-                highlightedBorderColor:Colors.white,
-                onPressed: (){
-                  // Navigator.of(context).pushReplacementNamed('ss');
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) =>UserProvider.token==null? StartScreen():BottomNavBar(),));
-                },child: Text('تخطي',style: Theme.of(context).textTheme.bodyText2,),),
-            ),
-
-          ],
-        ),
-      )
-    );
+              ),
+            ],
+          ),
+        ));
   }
-
 }
