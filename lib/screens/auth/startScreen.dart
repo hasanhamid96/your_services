@@ -61,7 +61,7 @@ class StartScreen extends StatelessWidget {
                   );
                 },
                 label: Text(
-                  'مستخدم',
+                  'زبون',
                   style: TextStyle(
                     fontSize: 25,
                     fontFamily: 'Cairo-Regular',

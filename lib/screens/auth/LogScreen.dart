@@ -874,7 +874,7 @@ class _LogScreenState extends State<LogScreen> {
               // }),
               if (!isLogin)
                 CupertinoButton(
-                    child: Text(isUser ? ' مستخدم' : ' مقدم الخدمة',
+                    child: Text(isUser ? ' زبون' : ' مقدم الخدمة',
                         style: Theme.of(context).textTheme.bodyText1),
                     onPressed: () {
                       setState(() {
