@@ -7,15 +7,13 @@ import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_services/model/person.dart';
-import 'package:your_services/screens/bottomScreens/main_screen.dart';
-
 
 class UserProvider with ChangeNotifier {
   static String appName = 'basmazon';
   static bool isLogin = false;
   static bool isLogged = false;
   static String userName;
-  static String hostName='https://urservices.creativeapps.me';
+  static String hostName = 'https://urservices.creativeapps.me';
   static String userPhone;
   static String userPhoto;
   static double latitude;
@@ -28,32 +26,33 @@ class UserProvider with ChangeNotifier {
   static int userId;
   static String token;
   static String address;
-  static String approval='0';
+  static String approval = '0';
 
-   double get latitudes{
+  double get latitudes {
     return latitude;
   }
-   double get longitudes{
+
+  double get longitudes {
     return longitude;
   }
+
   Future<String> registerUser({
     String name,
     String password,
     String phone,
     String genderr,
     String birthday,
-
   }) async {
     print('1 $name');
     print('2 $password');
     print('3 $phone');
 
-    final prefs=await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
 
-    if(playerId==null){
-      playerId= prefs.getString('playerId');
+    if (playerId == null) {
+      playerId = prefs.getString('playerId');
     }
 
     var url = Uri.parse("${UserProvider.hostName}/api/user/register");
@@ -76,11 +75,13 @@ class UserProvider with ChangeNotifier {
       request.fields["birthdate"] = birthday.toString();
       request.fields["gender"] = genderr.toString();
 
-      http.Response response = await http.Response.fromStream(await request.send());
-      print('${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+      http.Response response =
+          await http.Response.fromStream(await request.send());
+      print(
+          '${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
       print("Result: ${response.statusCode}");
-      var extractedProfile= jsonDecode(response.body) ;
-      if(extractedProfile['status'].toString()=='true') {
+      var extractedProfile = jsonDecode(response.body);
+      if (extractedProfile['status'].toString() == 'true') {
         prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
         prefs.setString(
             '$appName' + '_' + 'name', extractedProfile['user']['name']);
@@ -89,21 +90,17 @@ class UserProvider with ChangeNotifier {
 
         prefs.setString(
             '$appName' + '_' + 'token', extractedProfile['user']['token']);
-        prefs.setString(
-            '$appName' + '_' + 'type', 'user');
-        prefs.setString(
-            '$appName' + '_' + 'gender', genderr);
-        prefs.setString(
-            '$appName' + '_' + 'birthday', birthday);
-        gender=genderr;
-        birthDay=birthday;
+        prefs.setString('$appName' + '_' + 'type', 'user');
+        prefs.setString('$appName' + '_' + 'gender', genderr);
+        prefs.setString('$appName' + '_' + 'birthday', birthday);
+        gender = genderr;
+        birthDay = birthday;
         token = extractedProfile['user']['token'];
         userName = name;
         userPhone = phone;
         userId = extractedProfile['user']['id'];
-        type='user';
-      }
-      else{
+        type = 'user';
+      } else {
         return extractedProfile['msg'].toString();
       }
       if (response.statusCode == 200) {
@@ -111,9 +108,8 @@ class UserProvider with ChangeNotifier {
         print('success');
         return 'true';
       }
-      return response.statusCode == 200?'true':'false';
-    }
-    catch (e) {
+      return response.statusCode == 200 ? 'true' : 'false';
+    } catch (e) {
       print('$e');
       return Future.value(e['msg']);
     }
@@ -134,12 +130,12 @@ class UserProvider with ChangeNotifier {
     print('2 $password');
     print('3 $phone');
 
-    final prefs=await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
 
-    if(playerId==null){
-      playerId= prefs.getString('playerId');
+    if (playerId == null) {
+      playerId = prefs.getString('playerId');
     }
 
     var url = Uri.parse("${UserProvider.hostName}/api/user/register");
@@ -176,56 +172,52 @@ class UserProvider with ChangeNotifier {
         request.files.add(fily);
       }
 
-
       //Get the response from the server
-    http.Response response = await http.Response.fromStream(await request.send());
-    print('${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
-    print("Result: ${response.statusCode}");
-    var extractedProfile= jsonDecode(response.body) ;
+      http.Response response =
+          await http.Response.fromStream(await request.send());
+      print(
+          '${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+      print("Result: ${response.statusCode}");
+      var extractedProfile = jsonDecode(response.body);
 
-    if(extractedProfile['status'].toString()=='true') {
-      prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
-      prefs.setString(
-          '$appName' + '_' + 'name', extractedProfile['user']['name']);
-      prefs.setString(
-          '$appName' + '_' + 'phone', extractedProfile['user']['phone']);
-      prefs.setString(
-          '$appName' + '_' + 'photo', extractedProfile['user']['photo']);
-      prefs.setString(
-          '$appName' + '_' + 'address', extractedProfile['user']['address']);
-      prefs.setString(
-          '$appName' + '_' + 'token', extractedProfile['user']['token']);
-      prefs.setString(
-          '$appName' + '_' + 'latitude', latitude.toString());
-      prefs.setString(
-          '$appName' + '_' + 'longitude', longitude.toString());
-      prefs.setInt('$appName' + '_' + 'section_id',
-          extractedProfile['user']['section_id']);
-      prefs.setInt(
-          '$appName' + '_' + 'city_id', extractedProfile['user']['city_id']);
-      prefs.setInt(
-          '$appName' + '_' + 'approval', extractedProfile['user']['approval']);
-      token = extractedProfile['user']['token'];
-      userName = name;
-      userPhone = phone;
-      userId = extractedProfile['user']['id'];
-      Image = extractedProfile['user']['photo'];
-      approval = extractedProfile['user']['approval'].toString();
-      type='provider';
-      prefs.setString(
-          '$appName' + '_' + 'type', 'provider');
-    }
-    else{
+      if (extractedProfile['status'].toString() == 'true') {
+        prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
+        prefs.setString(
+            '$appName' + '_' + 'name', extractedProfile['user']['name']);
+        prefs.setString(
+            '$appName' + '_' + 'phone', extractedProfile['user']['phone']);
+        prefs.setString(
+            '$appName' + '_' + 'photo', extractedProfile['user']['photo']);
+        prefs.setString(
+            '$appName' + '_' + 'address', extractedProfile['user']['address']);
+        prefs.setString(
+            '$appName' + '_' + 'token', extractedProfile['user']['token']);
+        prefs.setString('$appName' + '_' + 'latitude', latitude.toString());
+        prefs.setString('$appName' + '_' + 'longitude', longitude.toString());
+        prefs.setInt('$appName' + '_' + 'section_id',
+            extractedProfile['user']['section_id']);
+        prefs.setInt(
+            '$appName' + '_' + 'city_id', extractedProfile['user']['city_id']);
+        prefs.setInt('$appName' + '_' + 'approval',
+            extractedProfile['user']['approval']);
+        token = extractedProfile['user']['token'];
+        userName = name;
+        userPhone = phone;
+        userId = extractedProfile['user']['id'];
+        Image = extractedProfile['user']['photo'];
+        approval = extractedProfile['user']['approval'].toString();
+        type = 'provider';
+        prefs.setString('$appName' + '_' + 'type', 'provider');
+      } else {
         return extractedProfile['msg'].toString();
-    }
+      }
       if (response.statusCode == 200) {
         isLogged = true;
-      print('success');
-      return 'true';
-    }
-      return response.statusCode == 200?'true':'false';
-    }
-    catch (e) {
+        print('success');
+        return 'true';
+      }
+      return response.statusCode == 200 ? 'true' : 'false';
+    } catch (e) {
       print('$e');
       return Future.value(e['msg'].toString());
     }
@@ -244,110 +236,106 @@ class UserProvider with ChangeNotifier {
     print(phone.toString());
     print(password.toString());
 
-    try{
-   var   respon=  await http.post(Uri.parse("${UserProvider.hostName}/api/user/login"), body: {
+    try {
+      var respon = await http
+          .post(Uri.parse("${UserProvider.hostName}/api/user/login"), body: {
         "phone": phone.toString(),
         "password": password.toString(),
         "onesignal": playerId.toString(),
       });
-        extractedProfile = json.decode(respon.body);
-        print(extractedProfile);
+      extractedProfile = json.decode(respon.body);
+      print(extractedProfile);
 
-        if (extractedProfile['status'] == false) {
-          isLogin = false;
-          retuningData=extractedProfile['msg'];
-          return extractedProfile['msg'];
-        } else {
-          prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
-          prefs.setString('$appName' + '_' + 'name', extractedProfile['user']['name']);
-          prefs.setString('$appName' + '_' + 'phone', extractedProfile['user']['phone']);
-          prefs.setString('$appName' + '_' + 'token', extractedProfile['user']['token']);
+      if (extractedProfile['status'] == false) {
+        isLogin = false;
+        retuningData = extractedProfile['msg'];
+        return extractedProfile['msg'];
+      } else {
+        prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
+        prefs.setString(
+            '$appName' + '_' + 'name', extractedProfile['user']['name']);
+        prefs.setString(
+            '$appName' + '_' + 'phone', extractedProfile['user']['phone']);
+        prefs.setString(
+            '$appName' + '_' + 'token', extractedProfile['user']['token']);
+        prefs.setString(
+            '$appName' + '_' + 'type', extractedProfile['user']['type']);
+
+        token = extractedProfile['user']['token'];
+        userName = extractedProfile['user']['name'];
+        userPhone = extractedProfile['user']['phone'];
+        userId = extractedProfile['user']['id'];
+        type = extractedProfile['user']['type'];
+        if ('provider' == extractedProfile['user']['type']) {
+          prefs.setString('$appName' + '_' + 'address',
+              extractedProfile['user']['address']);
           prefs.setString(
-              '$appName' + '_' + 'type', extractedProfile['user']['type']);
-
-          token = extractedProfile['user']['token'];
-          userName = extractedProfile['user']['name'];
-          userPhone =  extractedProfile['user']['phone'];
-          userId = extractedProfile['user']['id'];
-          type= extractedProfile['user']['type'];
-          if('provider'==extractedProfile['user']['type']){
-            prefs.setString(
-                '$appName' + '_' + 'address', extractedProfile['user']['address']);
-            prefs.setString('$appName' + '_' + 'photo', extractedProfile['user']['photo']);
-            prefs.setString(
-                '$appName' + '_' + 'latitude', extractedProfile['user']['lat'].toString());
-            prefs.setString(
-                '$appName' + '_' + 'longitude', extractedProfile['user']['long'].toString());
-            prefs.setInt(
-                '$appName' + '_' + 'approval', extractedProfile['user']['approval']);
-            Image=extractedProfile['user']['photo'];
-            address=extractedProfile['user']['address'];
-            approval = extractedProfile['user']['approval'].toString();
-          }
-          notifyListeners();
-          retuningData='login success';
-          if(extractedProfile['status']==true)
-            return 'login success';
-
+              '$appName' + '_' + 'photo', extractedProfile['user']['photo']);
+          prefs.setString('$appName' + '_' + 'latitude',
+              extractedProfile['user']['lat'].toString());
+          prefs.setString('$appName' + '_' + 'longitude',
+              extractedProfile['user']['long'].toString());
+          prefs.setInt('$appName' + '_' + 'approval',
+              extractedProfile['user']['approval']);
+          Image = extractedProfile['user']['photo'];
+          address = extractedProfile['user']['address'];
+          approval = extractedProfile['user']['approval'].toString();
         }
-     return retuningData;
-    }catch(e){
+        notifyListeners();
+        retuningData = 'login success';
+        if (extractedProfile['status'] == true) return 'login success';
+      }
+      return retuningData;
+    } catch (e) {
       print('$e   eeeeeeeeeeeeeeeeee');
-         return e['msg'];
+      return e['msg'];
     }
-
   }
-
 
   Future<Person> getProfile() async {
     Person person;
-    final prefs=await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     final List<Person> loadedPerson = [];
-     List<Person> finalLoadedPerson = [];
-      try {
-        final response = await http.get(
-            Uri.parse('${UserProvider.hostName}/api/user/profile'),
-            headers: {
-              'Authorization': '${token}',
-              'Accept': 'application/json'
-            });
-        var data4 = json.decode(response.body);
+    List<Person> finalLoadedPerson = [];
+    try {
+      final response = await http.get(
+          Uri.parse('${UserProvider.hostName}/api/user/profile'),
+          headers: {'Authorization': '$token', 'Accept': 'application/json'});
+      var data4 = json.decode(response.body);
 
-        if (data4['status'] == false) {
-          return null;
-        }
-        print(data4);
+      if (data4['status'] == false) {
+        return null;
+      }
+      print(data4);
 
+      loadedPerson.add(
+        person = Person(
+          id: data4['user']['id'],
+          name: data4['user']['name'],
+          phone: data4['user']['phone'],
+          image: data4['user']['photo'],
+          city_id: data4['user']['city_id'].toString(),
+          address: data4['user']['address'],
+          section_id: data4['user']['section_id'].toString(),
+          approval: data4['user']['approval'].toString(),
+          long: data4['user']['long'],
+          lat: data4['user']['lat'],
+          birthDay: data4['user']['birthdate'],
+          gender: data4['user']['gender'],
+          type: data4['user']['type'],
+        ),
+      );
+      prefs.setString('$appName' + '_' + 'approval', person.approval);
+      approval = person.approval;
 
-          loadedPerson.add(
-            person=  Person(
-              id: data4['user']['id'],
-              name: data4['user']['name'],
-              phone: data4['user']['phone'],
-              image: data4['user']['photo'],
-              city_id: data4['user']['city_id'].toString(),
-              address:data4['user']['address'],
-              section_id:data4['user']['section_id'].toString(),
-              approval: data4['user']['approval'].toString(),
-              long:  data4['user']['long'],
-              lat:  data4['user']['lat'],
-              birthDay:  data4['user']['birthdate'],
-              gender:  data4['user']['gender'],
-              type:  data4['user']['type'],
-            ),
-          );
-          prefs.setString('$appName' + '_' + 'approval', person.approval);
-          approval= person.approval;
-
-
-        if (data4['status'] == true) {
-          finalLoadedPerson=loadedPerson;
-          notifyListeners();
-        }
-        return person;
-      } catch (e) {
-        print('$e fetchDataCity');
-       throw e;
+      if (data4['status'] == true) {
+        finalLoadedPerson = loadedPerson;
+        notifyListeners();
+      }
+      return person;
+    } catch (e) {
+      print('$e fetchDataCity');
+      throw e;
     }
   }
 
@@ -361,8 +349,6 @@ class UserProvider with ChangeNotifier {
     String id,
     String birthDay,
     String gender,
-
-
   }) async {
     print('1 $file');
     print('1 $name');
@@ -376,19 +362,19 @@ class UserProvider with ChangeNotifier {
     var request = http.MultipartRequest("POST", (url));
 
     // try {
-      print("editing...");
-      request.headers.addAll({
-        'Authorization': '$token',
-        'Accept': 'application/json',
-      });
-      // request.fields["onesignal"] = playerId.toString();
+    print("editing...");
+    request.headers.addAll({
+      'Authorization': '$token',
+      'Accept': 'application/json',
+    });
+    // request.fields["onesignal"] = playerId.toString();
 
-        request.fields["name"] = name;
-      request.fields["phone"] = phone;
-      if(UserProvider.type=='user'){
-        request.fields["birthdate"] = birthDay.toString();
-        request.fields["gender"] = gender.toString();
-      }else{
+    request.fields["name"] = name;
+    request.fields["phone"] = phone;
+    if (UserProvider.type == 'user') {
+      request.fields["birthdate"] = birthDay.toString();
+      request.fields["gender"] = gender.toString();
+    } else {
       request.fields["address"] = address;
       request.fields["section_id"] = section_id;
       request.fields["city_id"] = city_id;
@@ -397,16 +383,18 @@ class UserProvider with ChangeNotifier {
       if (file != null) {
         var pic = await http.MultipartFile.fromPath("photo", file.path);
         request.files.add(pic);
-      }}
-      http.Response response = await http.Response.fromStream(await request.send());
-      print('${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
-      print("Result: ${response.statusCode}");
-
-      if (response.statusCode == 200) {
-        print('success');
-        return true;
       }
-      return response.statusCode == 200?true:false;
+    }
+    http.Response response =
+        await http.Response.fromStream(await request.send());
+    print('${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+    print("Result: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('success');
+      return true;
+    }
+    return response.statusCode == 200 ? true : false;
     // }
     // catch (e) {
     //   print('$e');
@@ -423,15 +411,15 @@ class UserProvider with ChangeNotifier {
     prefs.remove('$appName' + '_' + "token");
     prefs.remove('$appName' + '_' + "type");
     prefs.remove('$appName' + '_' + "id");
-     approval=null;
-     token=null;
-     userName=null;
-     userPhone=null;
-     userPhoto=null;
-     Image=null;
-     userId=null;
-     token=null;
-    address=null;
+    approval = null;
+    token = null;
+    userName = null;
+    userPhone = null;
+    userPhoto = null;
+    Image = null;
+    userId = null;
+    token = null;
+    address = null;
     prefs.clear();
     isLogin = false;
     userName = "Guest";
@@ -441,13 +429,15 @@ class UserProvider with ChangeNotifier {
     //     ? pageController.jumpToTab(3)
     //     : pageController.jumpToTab(0);
   }
+
   bool once = false;
   checkLogin() async {
     if (once == false) {
       once = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.containsKey('$appName' + '_' + 'token')) {
-        if(prefs.getString('$appName' + '_' + "type").toString()=='provider') {
+        if (prefs.getString('$appName' + '_' + "type").toString() ==
+            'provider') {
           print("provider");
           isLogin = true;
           userName = prefs.getString('$appName' + '_' + "name");
@@ -458,14 +448,13 @@ class UserProvider with ChangeNotifier {
           approval = prefs.getString('$appName' + '_' + "approval").toString();
           address = prefs.getString('$appName' + '_' + "address");
           type = 'provider';
-          latitude =
-          prefs.getString('$appName' + '_' + "lat") != null ? double.parse(
-              prefs.getString('$appName' + '_' + "lat")) : 0.0;
-          longitude =
-          prefs.getString('$appName' + '_' + "long") != null ? double.parse(
-              prefs.getString('$appName' + '_' + "long")) : 0.0;
-        }
-        else{
+          latitude = prefs.getString('$appName' + '_' + "lat") != null
+              ? double.parse(prefs.getString('$appName' + '_' + "lat"))
+              : 0.0;
+          longitude = prefs.getString('$appName' + '_' + "long") != null
+              ? double.parse(prefs.getString('$appName' + '_' + "long"))
+              : 0.0;
+        } else {
           print("user");
           userName = prefs.getString('$appName' + '_' + "name");
           userPhone = prefs.getString('$appName' + '_' + "phone");

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
@@ -384,9 +385,8 @@ class _LogScreenState extends State<LogScreen> {
                 child: Container(
                   width: double.infinity,
                   child: GestureDetector(
-                    onTap: !isLogin && isUser
-                        ? () => showCameraAndLibrary(context)
-                        : null,
+                    onTap:
+                        !isLogin && isUser ? () => _showPicker(context) : null,
                     child: Column(
                       children: [
                         SizedBox(
@@ -715,8 +715,9 @@ class _LogScreenState extends State<LogScreen> {
                                             textDirection: ui.TextDirection.rtl,
                                           ),
                                           InkWell(
-                                            onTap:
-                                                files != null ? null : pickFile,
+                                            onTap: () {
+                                              _showPicker(context);
+                                            },
                                             child: Container(
                                                 width: double.infinity,
                                                 child: Card(
@@ -730,33 +731,52 @@ class _LogScreenState extends State<LogScreen> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               13.0),
-                                                      child: files != null
-                                                          ? Row(
+                                                      child: imagePicked != null
+                                                          ?
+                                                          //  Container(
+                                                          //     height: 50,
+                                                          //     width: 50,
+                                                          //     child: Image.file(
+                                                          //         imagePicked),
+                                                          //   ),
+                                                          Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Icon(
-                                                                      CupertinoIcons
-                                                                          .checkmark_alt_circle,
-                                                                      color: Colors
-                                                                          .green,
+                                                                    // Icon(
+                                                                    //   CupertinoIcons
+                                                                    //       .checkmark_alt_circle,
+                                                                    //   color: Colors
+                                                                    //       .green,
+                                                                    // ),
+                                                                    // Text(
+                                                                    //     'تمت الاضافة'),
+                                                                    Container(
+                                                                      height:
+                                                                          100,
+                                                                      width:
+                                                                          100,
+                                                                      child: Image
+                                                                          .file(
+                                                                        imagePicked,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
                                                                     ),
-                                                                    Text(
-                                                                        'تمت الاضافة')
                                                                   ],
                                                                 ),
                                                                 InkWell(
                                                                   onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      files
-                                                                          .clear();
-                                                                      files =
-                                                                          null;
-                                                                    });
+                                                                    // setState(
+                                                                    //     () {
+                                                                    //   files
+                                                                    //       .clear();
+                                                                    //   files =
+                                                                    //       null;
+                                                                    // });
                                                                   },
                                                                   child: Icon(
                                                                     CupertinoIcons
@@ -966,23 +986,6 @@ class _LogScreenState extends State<LogScreen> {
     );
   }
 
-  List<File> files;
-
-  Future pickFile() async {
-    FilePickerResult result =
-        await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    if (result != null) {
-      setState(() {
-        files = null;
-        files = result.paths.map((path) => File(path)).toList();
-      });
-      Toast.show('تمت الاضافة', context);
-    } else {
-      // User canceled the picker
-    }
-  }
-
   Widget _buildSections(List<Section> sections) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1146,7 +1149,54 @@ class _LogScreenState extends State<LogScreen> {
   City selectedCity;
   int city_id;
 
-  void showCameraAndLibrary(BuildContext context) {
+  List<File> files;
+
+  Future pickFile() async {
+    FilePickerResult result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result != null) {
+      setState(() {
+        files = null;
+        files = result.paths.map((path) => File(path)).toList();
+      });
+      Toast.show('تمت الاضافة', context);
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  File imagePicked;
+
+  Future pickImage() async {
+    try {
+      final imagePicked =
+          await ImagePicker().getImage(source: ImageSource.camera);
+      if (imagePicked == null) return;
+      final imageTemporary = File(imagePicked.path);
+      setState(() {
+        this.imagePicked = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future galleryImage() async {
+    try {
+      final imagePicked =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+      if (imagePicked == null) return;
+      final imageTemporary = File(imagePicked.path);
+      setState(() {
+        this.imagePicked = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  void _showPicker(context) {
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
@@ -1156,7 +1206,7 @@ class _LogScreenState extends State<LogScreen> {
             children: [
               ListTile(
                 onTap: () {
-                  picked(1);
+                  pickImage();
                   return Navigator.of(context).pop();
                 },
                 leading: Icon(
@@ -1166,18 +1216,11 @@ class _LogScreenState extends State<LogScreen> {
                 title: Text(
                   'camera',
                   style: Theme.of(context).textTheme.headline1,
-                  // style: Theme.of(
-                  //     context)
-                  //     .textTheme
-                  //     .headline2,
                 ),
-              ),
-              Divider(
-                height: 0,
               ),
               ListTile(
                 onTap: () {
-                  picked(0);
+                  galleryImage();
                   return Navigator.of(context).pop();
                 },
                 leading: Icon(
@@ -1187,10 +1230,6 @@ class _LogScreenState extends State<LogScreen> {
                 title: Text(
                   'gallery',
                   style: Theme.of(context).textTheme.headline1,
-                  // style: Theme.of(
-                  //     context)
-                  //     .textTheme
-                  //     .headline2,
                 ),
               ),
             ],
@@ -1198,24 +1237,41 @@ class _LogScreenState extends State<LogScreen> {
         ),
         actions: [
           CupertinoDialogAction(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('back'))
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('back'),
+          ),
         ],
       ),
     );
-  }
 
-  Future picked(int type) async {
-    var _imagePick = await ImagePicker.platform.pickImage(
-        source: type == 1 ? ImageSource.camera : ImageSource.gallery,
-        maxHeight: 720,
-        maxWidth: 720,
-        imageQuality: 50);
-    if (_imagePick != null)
-      setState(() {
-        _image = File(_imagePick.path);
-      });
+    // showModalBottomSheet(
+    //     context: context,
+    //     builder: (BuildContext bc) {
+    //       return SafeArea(
+    //         child: Container(
+    //           child: new Wrap(
+    //             children: <Widget>[
+    //               new ListTile(
+    //                   leading: new Icon(Icons.photo_library),
+    //                   title: new Text('Photo Library'),
+    //                   onTap: () {
+    //                     galleryImage();
+    //                     Navigator.of(context).pop();
+    //                   }),
+    //               new ListTile(
+    //                 leading: new Icon(Icons.photo_camera),
+    //                 title: new Text('Camera'),
+    //                 onTap: () {
+    //                   pickImage();
+    //                   Navigator.of(context).pop();
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 }

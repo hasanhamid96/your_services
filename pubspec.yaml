@@ -39,7 +39,7 @@ dependencies:
 #  chewie: ^1.0.0
   shimmer: ^2.0.0
 #  clippy_flutter: ^1.1.1
-  image_picker: ^0.8.1+1
+  image_picker: ^0.8.4+4
   intl:
   shared_preferences: ^2.0.6
   onesignal_flutter: ^2.6.1
