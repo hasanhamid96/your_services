@@ -16,6 +16,7 @@ import 'package:your_services/model/section.dart';
 import 'package:your_services/providers/cities.dart';
 import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/widgets/curvePainter.dart';
 import '../bottomScreens/bottomNavBar.dart';
 import '../maps/map-screen.dart';
@@ -188,12 +189,19 @@ class _LogScreenState extends State<LogScreen> {
                                 isLogging = false;
                               });
                               Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
-                                builder: (context) => BottomNavBar(
-                                  islogining: true,
+                              //old
+                              //       Navigator.of(context)
+                              //     .pushReplacement(MaterialPageRoute(
+                              //   builder: (context) => BottomNavBar(
+                              //     islogining: true,
+                              //   ),
+                              // ));
+                              //new
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Subscrption(),
                                 ),
-                              ));
+                              );
                             } else {
                               setStates(() {
                                 signing = false;
@@ -1229,6 +1237,20 @@ class _LogScreenState extends State<LogScreen> {
                 ),
                 title: Text(
                   'gallery',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  pickFile();
+                  return Navigator.of(context).pop();
+                },
+                leading: Icon(
+                  CupertinoIcons.folder,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'pdf',
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ),
