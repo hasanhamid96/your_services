@@ -174,14 +174,15 @@ class _LogScreenState extends State<LogScreen> {
                           print('registering Craft...');
                           Provider.of<UserProvider>(context, listen: false)
                               .registerCraft(
-                                  name: name,
-                                  password: pass,
-                                  phone: phone,
-                                  city_id: city_id,
-                                  section_id: section_id,
-                                  file: files[0],
-                                  image: _image,
-                                  address: address)
+                            name: name,
+                            password: pass,
+                            phone: phone,
+                            city_id: city_id,
+                            section_id: section_id,
+                            file: imagePicked,
+                            image: _image,
+                            address: address,
+                          )
                               .then((value) {
                             if (value == 'true') {
                               setStates(() {
@@ -471,7 +472,7 @@ class _LogScreenState extends State<LogScreen> {
                                       style:
                                           Theme.of(context).textTheme.headline1,
                                       decoration: InputDecoration(
-                                        hintText: 'الرقم',
+                                        hintText: 'رقم الموبايل',
                                       ),
                                     ),
                                     SizedBox(
@@ -544,7 +545,7 @@ class _LogScreenState extends State<LogScreen> {
                                                   .textTheme
                                                   .headline1,
                                               decoration: InputDecoration(
-                                                hintText: 'الرقم',
+                                                hintText: 'رقم الموبايل',
                                               ),
                                             ),
                                             SizedBox(
@@ -635,7 +636,7 @@ class _LogScreenState extends State<LogScreen> {
                                                 .textTheme
                                                 .headline1,
                                             decoration: InputDecoration(
-                                              hintText: 'الرقم',
+                                              hintText: 'رقم الموبايل',
                                             ),
                                           ),
                                           SizedBox(
@@ -724,7 +725,7 @@ class _LogScreenState extends State<LogScreen> {
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              _showPicker(context);
+                                              _showFilPicker(context);
                                             },
                                             child: Container(
                                                 width: double.infinity,
@@ -1205,6 +1206,85 @@ class _LogScreenState extends State<LogScreen> {
   }
 
   void _showPicker(context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        content: Material(
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  pickImage();
+                  return Navigator.of(context).pop();
+                },
+                leading: Icon(
+                  CupertinoIcons.camera,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'camera',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  galleryImage();
+                  return Navigator.of(context).pop();
+                },
+                leading: Icon(
+                  CupertinoIcons.photo,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  'gallery',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('back'),
+          ),
+        ],
+      ),
+    );
+
+    // showModalBottomSheet(
+    //     context: context,
+    //     builder: (BuildContext bc) {
+    //       return SafeArea(
+    //         child: Container(
+    //           child: new Wrap(
+    //             children: <Widget>[
+    //               new ListTile(
+    //                   leading: new Icon(Icons.photo_library),
+    //                   title: new Text('Photo Library'),
+    //                   onTap: () {
+    //                     galleryImage();
+    //                     Navigator.of(context).pop();
+    //                   }),
+    //               new ListTile(
+    //                 leading: new Icon(Icons.photo_camera),
+    //                 title: new Text('Camera'),
+    //                 onTap: () {
+    //                   pickImage();
+    //                   Navigator.of(context).pop();
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
+  }
+
+  void _showFilPicker(context) {
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
