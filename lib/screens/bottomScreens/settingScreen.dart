@@ -19,8 +19,7 @@ import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/widgets/profileScreen.dart';
-import 'dart:ui'as ui;
-
+import 'dart:ui' as ui;
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -28,26 +27,28 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-
   bool isLoad = false;
   var index = true;
   var isArabic = true;
   var status;
 
-
-
-  void getNotify()async{
-    final prefs=await SharedPreferences.getInstance();
-    if(mounted)
+  void getNotify() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted)
       setState(() {
-        index= prefs.getBool('IsNotification')==null?true:prefs.getBool('IsNotification');
+        index = prefs.getBool('IsNotification') == null
+            ? true
+            : prefs.getBool('IsNotification');
       });
   }
-  void getLang()async{
-    final prefs=await SharedPreferences.getInstance();
-    if(mounted)
+
+  void getLang() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted)
       setState(() {
-        isArabic= prefs.getBool('isArabic')==null?true:prefs.getBool('isArabic');
+        isArabic = prefs.getBool('isArabic') == null
+            ? true
+            : prefs.getBool('isArabic');
       });
   }
 
@@ -70,7 +71,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Container(
-          margin:  EdgeInsets.all(8),
+          margin: EdgeInsets.all(8),
           padding: EdgeInsets.all(2),
           decoration: BoxDecoration(
             borderRadius: new BorderRadius.circular(10),
@@ -89,108 +90,252 @@ class _SettingScreenState extends State<SettingScreen> {
               borderRadius: BorderRadius.circular(30),
               child: Center(
                   child: Text(
-                    'الأعدادت',
-                    textDirection: ui.TextDirection.rtl,
-                    style: Theme.of(context).textTheme.headline3,
-                  ))),
+                'الأعدادت',
+                textDirection: ui.TextDirection.rtl,
+                style: Theme.of(context).textTheme.headline3,
+              ))),
         ),
         backgroundColor: Colors.transparent,
       ),
-      child:
-       isLoad?SizedBox(
-          width: mediaQuery.width,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Shimmer.fromColors(
-              baseColor: Colors.black12,
-              highlightColor: Colors.white ,
-              child:  Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for(int i=0;i<10;i++)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top:40),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          width: mediaQuery.width*0.4,
-                          height: mediaQuery.height*0.25,
+      child: isLoad
+          ? SizedBox(
+              width: mediaQuery.width,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < 10; i++)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 40),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              width: mediaQuery.width * 0.4,
+                              height: mediaQuery.height * 0.25,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 40),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              width: mediaQuery.width * 0.4,
+                              height: mediaQuery.height * 0.25,
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 20,),
-                        Container(
-                          margin: EdgeInsets.only(top:40),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          width: mediaQuery.width*0.4,
-                          height: mediaQuery.height*0.25,
-                        ),
-                      ],
-                    ),
-                  SizedBox(height: 10,),
-                  // ListView.builder(
-                  //   shrinkWrap: false,
-                  //   itemBuilder: (_, __) => Padding(
-                  //     padding: const EdgeInsets.only(bottom: 8.0,top: 10,left: 5,right: 5),
-                  //     child:
-                  //   ),
-                  //   itemCount: 10,
-                  // ),
-                ],
+                      SizedBox(
+                        height: 10,
+                      ),
+                      // ListView.builder(
+                      //   shrinkWrap: false,
+                      //   itemBuilder: (_, __) => Padding(
+                      //     padding: const EdgeInsets.only(bottom: 8.0,top: 10,left: 5,right: 5),
+                      //     child:
+                      //   ),
+                      //   itemCount: 10,
+                      // ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ): 
-       Material(
-         child: SingleChildScrollView(
-           physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 70,),
-                Row(
+            )
+          : Material(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
+                    SizedBox(
+                      height: 70,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        sheet(mediaQuery.height * 0.30, mediaQuery.width * 0.45,
-                            'assets/images/suport.png','تواصل معنا', context,),
-                        sheet(mediaQuery.height * 0.175, mediaQuery.width * 0.45,
-                            'assets/images/share.png', 'شاركنا', context,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            sheet(
+                              mediaQuery.height * 0.30,
+                              mediaQuery.width * 0.45,
+                              'assets/images/suport.png',
+                              'تواصل معنا',
+                              context,
+                            ),
+                            sheet(
+                              mediaQuery.height * 0.175,
+                              mediaQuery.width * 0.45,
+                              'assets/images/share.png',
+                              'شاركنا',
+                              context,
+                            ),
+                          ],
+                        ),
+                        sheet(
+                          mediaQuery.height * 0.5,
+                          mediaQuery.width * 0.45,
+                          'assets/images/who we.png',
+                          'من نحن',
+                          context,
+                        ),
                       ],
                     ),
-                    sheet(mediaQuery.height * 0.5, mediaQuery.width * 0.45,
-                        'assets/images/who we.png', 'من نحن', context,),
-                  ],
-                ),
-                sheet(
-                    mediaQuery.height * 0.3,
-                    mediaQuery.width * 0.93,
-                    'assets/images/follow.png',
-                   'تابعنا',
-                    context,
-                ),
-                if(UserProvider.token!=null)
-                Padding(
-                  padding:   EdgeInsets.only(top: 8, bottom: 8),
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.of(context).push(
-                          CupertinoPageRoute(
-                              builder: (context) => ProfileScreen()));
-                    },
-                    highlightColor: Colors.yellowAccent,
-                    splashColor: Colors.yellowAccent,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
+                    sheet(
+                      mediaQuery.height * 0.3,
+                      mediaQuery.width * 0.93,
+                      'assets/images/follow.png',
+                      'تابعنا',
+                      context,
+                    ),
+                    if (UserProvider.token != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8, bottom: 8),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => ProfileScreen()));
+                          },
+                          highlightColor: Colors.yellowAccent,
+                          splashColor: Colors.yellowAccent,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: new BorderRadius.circular(10),
+                              shape: BoxShape.rectangle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black38,
+                                    offset: Offset(10, 5),
+                                    blurRadius: 20,
+                                    spreadRadius: -10)
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.93,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    CupertinoIcons.person_crop_circle,
+                                    size: 30,
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.only(right: 20.0),
+                                    child: Text(
+                                      'ملفي الشخصي',
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (UserProvider.token != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8, bottom: 8),
+                        child: InkWell(
+                          onTap: () {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: Text(
+                                    "هل تريد تسجيل الخروج",
+                                    style:
+                                        Theme.of(context).textTheme.headline1,
+                                  ),
+                                  // content: Text(
+                                  //   'هل انت متأكد؟',
+                                  //   style:
+                                  //       Theme.of(context).textTheme.headline1,
+                                  // ),
+                                  actions: [
+                                    CupertinoButton(
+                                      // color: Colors.red,
+                                      child: Text("لا",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    CupertinoButton(
+                                        child: Text("نعم",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontFamily: 'Cairo-Regular',
+                                            )),
+                                        onPressed: () {
+                                          Provider.of<UserProvider>(context,
+                                                  listen: false)
+                                              .signOut();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                                  StartScreen.routeName,
+                                                  (Route<dynamic> route) =>
+                                                      false);
+                                        }),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          highlightColor: Colors.yellowAccent,
+                          splashColor: Colors.yellowAccent,
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: new BorderRadius.circular(10),
+                              shape: BoxShape.rectangle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black38,
+                                    offset: Offset(10, 5),
+                                    blurRadius: 20,
+                                    spreadRadius: -10)
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.93,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    CupertinoIcons.square_arrow_left_fill,
+                                    size: 30,
+                                  ),
+                                ),
+                                Text(
+                                  'تسجيل الخروج',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    Container(
+                      margin: EdgeInsets.only(top: 8, bottom: 8),
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: new BorderRadius.circular(10),
@@ -208,209 +353,116 @@ class _SettingScreenState extends State<SettingScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                         Padding(
-                           padding: const EdgeInsets.all(8.0),
-                           child: Icon(CupertinoIcons.person_crop_circle,size: 30,),
-                         ),
+                          // Icon(!index?FlutterIcons.notifications_off_mdi:FlutterIcons.notifications_mdi,color:index? Colors.pinkAccent:Colors.black,),
+                          Switch.adaptive(
+                            value: index,
+                            onChanged: (value) async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setBool('IsNotification', value);
+                              setState(() {
+                                Toast.show(
+                                    !index
+                                        ? 'تم تفعيل الاشعارات'
+                                        : "تم الغاء تفعيل الاشعارات",
+                                    context,
+                                    duration: Toast.LENGTH_SHORT,
+                                    gravity: Toast.CENTER);
+                                index = value;
+                                print(index);
+                              });
+                              await OneSignal.shared.setSubscription(index);
+                            },
+                          ),
                           Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
+                              padding: const EdgeInsets.only(right: 10.0),
                               child: Text(
-                                'ملفي الشخصي',
+                                ' الاشعارات',
                               )),
                         ],
                       ),
                     ),
-                  ),
-                ),
-                if(UserProvider.token!=null)
-                  Padding(
-                    padding:   EdgeInsets.only(top: 8, bottom: 8),
-                    child: InkWell(
-                      onTap: (){
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (context) {
-                            return CupertinoAlertDialog(
-                              title: Text(
-                                "تسجيل خروج",
-                                style: Theme.of(context).textTheme.headline1,
-                              ),
-                              content: Text('هل انت متأكد؟',     style: Theme.of(context).textTheme.headline1,),
-                              actions: [
-                                CupertinoButton(
-                                  // color: Colors.red,
-                                  child: Text("لا",style: Theme.of(context).textTheme.headline1),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                CupertinoButton(
-                                    child:
-                                    Text("نعم", style: TextStyle(color: Colors.red,fontFamily: 'Cairo-Regular',)),
-                                    onPressed: () {
-                                      Provider.of<UserProvider>(context, listen: false)
-                                          .signOut();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(StartScreen.routeName, (Route<dynamic> route) => false);
-                                    }),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      highlightColor: Colors.yellowAccent,
-                      splashColor: Colors.yellowAccent,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: new BorderRadius.circular(10),
-                          shape: BoxShape.rectangle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black38,
-                                offset: Offset(10, 5),
-                                blurRadius: 20,
-                                spreadRadius: -10)
-                          ],
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.93,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(CupertinoIcons.square_arrow_left_fill,size: 30,),
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Text(
-                                  'تسجيل خروج',
-                                )),
-                          ],
-                        ),
-                      ),
+                    // Container(
+                    //   margin: EdgeInsets.only( bottom: 8),
+                    //   padding: EdgeInsets.all(8),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: new BorderRadius.circular(10),
+                    //     shape: BoxShape.rectangle,
+                    //     color: Colors.white,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //           color: Colors.black38,
+                    //           offset: Offset(10, 5),
+                    //           blurRadius: 20,
+                    //           spreadRadius: -10)
+                    //     ],
+                    //   ),
+                    //   width: MediaQuery.of(context).size.width * 0.93,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       // Icon(!index?FlutterIcons.notifications_off_mdi:FlutterIcons.notifications_mdi,color:index? Colors.pinkAccent:Colors.black,),
+                    //       // Switch.adaptive(
+                    //       //   value: isArabic,
+                    //       //   onChanged: (value) async {
+                    //       //     final prefs=await SharedPreferences.getInstance();
+                    //       //     prefs.setBool('isArabic', value);
+                    //       //     if(value){
+                    //       //       setState(() {
+                    //       //       //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //       //       //     builder: (context) => FloatingBottomNavBar(),
+                    //       //       //   ));
+                    //       //       //   lang.saveLanguageIndex(0);
+                    //       //       //   Languages.selectedLanguage = 0;
+                    //       //       //   lang.saveLanguageIndex(0);
+                    //       //       // });
+                    //       //
+                    //       //     }
+                    //       //     else{
+                    //       //       setState(() {
+                    //       //         Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //       //           builder: (context) => FloatingBottomNavBar(),
+                    //       //         ));
+                    //       //         lang.saveLanguageIndex(1);
+                    //       //         Languages.selectedLanguage = 1;
+                    //       //         lang.saveLanguageIndex(1);
+                    //       //       });
+                    //       //
+                    //       //     }
+                    //       //     setState(() {
+                    //       //       Toast.show(!isArabic?'تم تحويل اللغة الى العربية ':"The language has been converted to Engilsh", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
+                    //       //
+                    //       //       isArabic = value;
+                    //       //       print(isArabic);
+                    //       //     });
+                    //       //
+                    //       //   },
+                    //       // ),
+                    //       Padding(
+                    //           padding: const EdgeInsets.only(right: 10.0),
+                    //           child: Text(
+                    //             lang.translation['changeLang'][Languages.selectedLanguage],
+                    //           )),
+                    //     ],
+                    //   ),
+                    // ),
+                    SizedBox(
+                      height: 100,
                     ),
-                  ),
-                Container(
-                  margin: EdgeInsets.only(top: 8, bottom: 8),
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black38,
-                          offset: Offset(10, 5),
-                          blurRadius: 20,
-                          spreadRadius: -10)
-                    ],
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.93,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Icon(!index?FlutterIcons.notifications_off_mdi:FlutterIcons.notifications_mdi,color:index? Colors.pinkAccent:Colors.black,),
-                      Switch.adaptive(
-                        value: index,
-                        onChanged: (value) async {
-                          final prefs=await SharedPreferences.getInstance();
-                          prefs.setBool('IsNotification', value);
-                          setState(() {
-                            Toast.show(!index?'تم تفعيل الاشعارات':"تم الغاء تفعيل الاشعارات", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
-                            index = value;
-                            print(index);
-                          });
-                          await OneSignal.shared.setSubscription(index);
-                        },
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Text(
-                           ' الاشعارات',
-                          )),
-                    ],
-                  ),
+                  ],
                 ),
-                // Container(
-                //   margin: EdgeInsets.only( bottom: 8),
-                //   padding: EdgeInsets.all(8),
-                //   decoration: BoxDecoration(
-                //     borderRadius: new BorderRadius.circular(10),
-                //     shape: BoxShape.rectangle,
-                //     color: Colors.white,
-                //     boxShadow: [
-                //       BoxShadow(
-                //           color: Colors.black38,
-                //           offset: Offset(10, 5),
-                //           blurRadius: 20,
-                //           spreadRadius: -10)
-                //     ],
-                //   ),
-                //   width: MediaQuery.of(context).size.width * 0.93,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       // Icon(!index?FlutterIcons.notifications_off_mdi:FlutterIcons.notifications_mdi,color:index? Colors.pinkAccent:Colors.black,),
-                //       // Switch.adaptive(
-                //       //   value: isArabic,
-                //       //   onChanged: (value) async {
-                //       //     final prefs=await SharedPreferences.getInstance();
-                //       //     prefs.setBool('isArabic', value);
-                //       //     if(value){
-                //       //       setState(() {
-                //       //       //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //       //       //     builder: (context) => FloatingBottomNavBar(),
-                //       //       //   ));
-                //       //       //   lang.saveLanguageIndex(0);
-                //       //       //   Languages.selectedLanguage = 0;
-                //       //       //   lang.saveLanguageIndex(0);
-                //       //       // });
-                //       //
-                //       //     }
-                //       //     else{
-                //       //       setState(() {
-                //       //         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //       //           builder: (context) => FloatingBottomNavBar(),
-                //       //         ));
-                //       //         lang.saveLanguageIndex(1);
-                //       //         Languages.selectedLanguage = 1;
-                //       //         lang.saveLanguageIndex(1);
-                //       //       });
-                //       //
-                //       //     }
-                //       //     setState(() {
-                //       //       Toast.show(!isArabic?'تم تحويل اللغة الى العربية ':"The language has been converted to Engilsh", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
-                //       //
-                //       //       isArabic = value;
-                //       //       print(isArabic);
-                //       //     });
-                //       //
-                //       //   },
-                //       // ),
-                //       Padding(
-                //           padding: const EdgeInsets.only(right: 10.0),
-                //           child: Text(
-                //             lang.translation['changeLang'][Languages.selectedLanguage],
-                //           )),
-                //     ],
-                //   ),
-                // ),
-                SizedBox(
-                  height: 100,
-                ),
-              ],
+              ),
             ),
-          ),
-       ),
     );
   }
 
-  Widget sheet(double height, double width, String image, String text,
-      BuildContext context,) {
+  Widget sheet(
+    double height,
+    double width,
+    String image,
+    String text,
+    BuildContext context,
+  ) {
     return GestureDetector(
       onTap: () {
         _bottomsheet(context, text);
@@ -436,33 +488,35 @@ class _SettingScreenState extends State<SettingScreen> {
           height: height,
           child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  children: [
-                    Image.asset(
-                      image,
-                      width: width - 10,
-                      height: height - 49,
-                    ),
-                    Center(
-                        child: Text(
-                          text,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        )),
-                  ],
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              children: [
+                Image.asset(
+                  image,
+                  width: width - 10,
+                  height: height - 49,
                 ),
-              )),
+                Center(
+                    child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )),
+              ],
+            ),
+          )),
         ),
       ),
     );
   }
 
-  Future<dynamic> _bottomsheet(BuildContext context, String text, ) async {
-
+  Future<dynamic> _bottomsheet(
+    BuildContext context,
+    String text,
+  ) async {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Container(
-          height:text =='تابعنا'? 400:300,
+          height: text == 'تابعنا' ? 400 : 300,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -478,22 +532,25 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   if (text == 'من نحن')
                     Text(
-                       'تطبيق خدماتك يمك يقدم كل ما يحتاجه البيت العراقي من خدمات صحيه،منزليه،نقل،خدمات بناء عن طريق افضل شركات البناء ،شركات سياحية،دليل مطاعم، حجوزات فنادق و غيرها من تسهيلات اخرى تكدر تحصله انت و بالبيت بدون تعب( اطباء ، عيادات ، مستشفيات ، محامين ، اسوق ، ) وغيرها',
+                        'تطبيق خدماتك يمك يقدم كل ما يحتاجه البيت العراقي من خدمات صحيه،منزليه،نقل،خدمات بناء عن طريق افضل شركات البناء ،شركات سياحية،دليل مطاعم، حجوزات فنادق و غيرها من تسهيلات اخرى تكدر تحصله انت و بالبيت بدون تعب( اطباء ، عيادات ، مستشفيات ، محامين ، اسوق ، ) وغيرها',
                         textAlign: TextAlign.center),
-                  if(text == 'من نحن')
-                    Image.asset('assets/images/sssssss.png',width: 200,),
-                  if (text =='شاركنا')
+                  if (text == 'من نحن')
+                    Image.asset(
+                      'assets/images/sssssss.png',
+                      width: 200,
+                    ),
+                  if (text == 'شاركنا')
                     Text(
-                    'قم بمشاركة رابط التطبيق خدماتك يمك من خلال ارسالة الى اصدقائك واقاربك او مشاركة عبر وسائل التواصل الاجتماعي لكي تسهم في انجاح وتطوير العمل' ,
+                      'قم بمشاركة رابط التطبيق خدماتك يمك من خلال ارسالة الى اصدقائك واقاربك او مشاركة عبر وسائل التواصل الاجتماعي لكي تسهم في انجاح وتطوير العمل',
                       textAlign: TextAlign.center,
                     ),
                   SizedBox(
                     height: 25,
                   ),
-                  if (text =='شاركنا' )
+                  if (text == 'شاركنا')
                     NiceButton(
-                      // mini: true,
-                        text:'مشاركة التطبيق' ,
+                        // mini: true,
+                        text: 'مشاركة التطبيق',
                         elevation: 8.0,
                         radius: 50.0,
                         gradientColors: [
@@ -502,20 +559,20 @@ class _SettingScreenState extends State<SettingScreen> {
                         ],
                         icon: CupertinoIcons.share,
                         background: Colors.red,
-                        onPressed: ()async {
+                        onPressed: () async {
                           Navigator.of(context).pop();
                           await Share.share('${social.share}');
                         }),
-                  if (text =='تواصل معنا' )
+                  if (text == 'تواصل معنا')
                     Text(
-                    'يمكنكم التواصل معنا من خلال الضغط على زر الاتصال  حيث سنكون متواجدين على مدار الاسبوع',
+                      'يمكنكم التواصل معنا من خلال الضغط على زر الاتصال  حيث سنكون متواجدين على مدار الاسبوع',
                       textAlign: TextAlign.center,
                     ),
-                  if (text == 'تواصل معنا' )
+                  if (text == 'تواصل معنا')
                     SizedBox(
                       height: 30,
                     ),
-                  if (text == 'تواصل معنا' )
+                  if (text == 'تواصل معنا')
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -539,13 +596,13 @@ class _SettingScreenState extends State<SettingScreen> {
                             // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
                             icon: FlutterIcons.call_end_mdi,
                             background: Colors.red,
-                            onPressed: ()async {
+                            onPressed: () async {
                               Navigator.of(context).pop();
                               launch("tel://${social.whatsApp1}");
                             }),
                       ],
                     ),
-                  if (text =='تابعنا' )
+                  if (text == 'تابعنا')
                     Text(
                       'يمكنكم متابعتنا من خلال وسائل التواصل الاجتماعي لمعرفة اخر التحديثات المضافة لتطبيق وجميع انواع الخدمات  عبر صفحتنا على الفيس بوك و الانستغرام',
                       textAlign: TextAlign.center,
@@ -589,23 +646,20 @@ class _SettingScreenState extends State<SettingScreen> {
                             mini: true,
                             elevation: 8.0,
                             radius: 50.0,
-                            gradientColors: [
-                              Colors.redAccent,
-                              Colors.red[200]
-                            ],
-                            icon: FlutterIcons.web_mco ,
+                            gradientColors: [Colors.redAccent, Colors.red[200]],
+                            icon: FlutterIcons.web_mco,
                             background: Colors.red,
                             onPressed: () {
                               Navigator.of(context).pop();
                               openWebSite();
                             }),
-
-
                       ],
                     ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   if (text == 'تابعنا')
-                  Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         NiceButton(
@@ -617,7 +671,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               Colors.lightBlue,
                               Colors.lightBlue[200]
                             ],
-                            icon: FlutterIcons.twitter_ant ,
+                            icon: FlutterIcons.twitter_ant,
                             background: Colors.lightBlue,
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -631,7 +685,6 @@ class _SettingScreenState extends State<SettingScreen> {
           )),
     );
   }
-
 
   Social social = Social(
       share: null,
@@ -724,15 +777,16 @@ class _SettingScreenState extends State<SettingScreen> {
     }
   }
 
-  Future<String> whatsApp1()async {
+  Future<String> whatsApp1() async {
     var url;
     if (Platform.isAndroid) {
       // add the [https]
-      url= "https://wa.me/964${social.whatsApp1}/?text=السلام عليكم استاذ"; // new line
+      url =
+          "https://wa.me/964${social.whatsApp1}/?text=السلام عليكم استاذ"; // new line
     } else {
       // add the [https]
       // return "whatsapp://send?phone=96407810000205&text=السلام عليكم استاذ";    }
-      url= "https://api.whatsapp.com/send?phone=964${social.whatsApp1}";
+      url = "https://api.whatsapp.com/send?phone=964${social.whatsApp1}";
     }
     if (await canLaunch(url)) {
       await launch(url);
@@ -740,7 +794,6 @@ class _SettingScreenState extends State<SettingScreen> {
       FlushDialog.flushDialog(context, 'error', 'لم يتم تنزيل الواتس');
       throw 'Could not launch ${whatsApp1()}';
     }
-
   }
 
   Future<void> openWebSite() async {
@@ -754,7 +807,6 @@ class _SettingScreenState extends State<SettingScreen> {
       throw 'Could not open the WebSite.';
     }
   }
-
 }
 
 class HeaderCurvedContainer extends CustomPainter {
@@ -776,5 +828,3 @@ class HeaderCurvedContainer extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
-
-
