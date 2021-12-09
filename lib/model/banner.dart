@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart'as http;
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:your_services/providers/user.dart';
-class Baner{
+
+class Baner {
   int id;
   int doctor_id;
   String image;
@@ -12,26 +14,35 @@ class Baner{
   Baner({
     this.id,
     this.image,
-    this.doctor_id
-});
+    this.doctor_id,
+  });
 }
-class Bannsers extends ChangeNotifier{
 
-
-
+class Bannsers extends ChangeNotifier {
   Future<List<Baner>> getImagesBanner() async {
     var url = '${UserProvider.hostName}/api/banners';
     List<Baner> banner = [];
     try {
-      final response = await http.get(Uri.parse(url),headers: {
-        'Authorization':'${UserProvider.token}',
-        'Accept' :'application/json',
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': '${UserProvider.token}',
+          'Accept': 'application/json',
+        },
+      );
       var extractCarData = json.decode(response.body);
       print(extractCarData);
-      extractCarData['banners'].forEach((item) {
-        banner.add(Baner(id:item['id'],image: item['photo'].toString(),doctor_id: item['user_id'] ));
-      });
+      extractCarData['banners'].forEach(
+        (item) {
+          banner.add(
+            Baner(
+              id: item['id'],
+              image: item['photo'].toString(),
+              doctor_id: item['user_id'],
+            ),
+          );
+        },
+      );
 
       notifyListeners();
       return banner;

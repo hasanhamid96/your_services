@@ -50,6 +50,8 @@ class UserProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
+    print(
+        'playerIddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd $playerId');
 
     if (playerId == null) {
       playerId = prefs.getString('playerId');

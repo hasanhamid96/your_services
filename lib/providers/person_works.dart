@@ -1,14 +1,11 @@
 import 'dart:io';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:your_services/model/person_work.dart';
 import 'package:your_services/providers/user.dart';
-
-
 
 class PersonWorks extends ChangeNotifier {
   List<PersonWork> _items = [
@@ -24,32 +21,28 @@ class PersonWorks extends ChangeNotifier {
   List<PersonWork> get items {
     return [..._items];
   }
-  void clearItems(){
-    _items=[];
+
+  void clearItems() {
+    _items = [];
     notifyListeners();
   }
 
-
-
-  Future<bool> addWork(
-      {int work_id,
-      File file,
-      String title,
-      String description,
-      isEdting:false,
-
-     }) async{
-
+  Future<bool> addWork({
+    int work_id,
+    File file,
+    String title,
+    String description,
+    isEdting: false,
+  }) async {
     print(description);
     print(file);
     print(work_id);
     print(title);
     var url;
-    if(!isEdting)
-     url = '${UserProvider.hostName}/api/user/achievement';
-   else
-    url =   '${UserProvider.hostName}/api/user/achievement/edit/${work_id}';
-
+    if (!isEdting)
+      url = '${UserProvider.hostName}/api/user/achievement';
+    else
+      url = '${UserProvider.hostName}/api/user/achievement/edit/${work_id}';
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
 
@@ -69,12 +62,16 @@ class PersonWorks extends ChangeNotifier {
         request.files.add(pic);
       }
       var response = await request.send();
-      if(isEdting){
-        var index=_items.indexWhere((element) => element.id==work_id);
-        _items[index]=PersonWork(id: _items[index].id, title: title, description: description, imageFile: file);
-      }
-      else
-        _items.add(PersonWork(id: 1, title: title, description: description, imageFile: file))  ;
+      if (isEdting) {
+        var index = _items.indexWhere((element) => element.id == work_id);
+        _items[index] = PersonWork(
+            id: _items[index].id,
+            title: title,
+            description: description,
+            imageFile: file);
+      } else
+        _items.add(PersonWork(
+            id: 1, title: title, description: description, imageFile: file));
 
       notifyListeners();
 
@@ -95,26 +92,29 @@ class PersonWorks extends ChangeNotifier {
     }
   }
 
-  Future<bool> getAllDoctorWorks({int Id,isFromList:false}) async {
+  Future<bool> getAllDoctorWorks({int Id, isFromList: false}) async {
     var url;
     var response;
-  if(UserProvider.token != null&&!isFromList)
-    url='${UserProvider.hostName}/api/user/achievement';
-  else
-    url='${UserProvider.hostName}/api/user/achievement?id=$Id';
-   print(url);
+    if (UserProvider.token != null && !isFromList)
+      url = '${UserProvider.hostName}/api/user/achievement';
+    else
+      url = '${UserProvider.hostName}/api/user/achievement?id=$Id';
+    print(url);
     final List<PersonWork> loadedWorks = [];
-    _items=[];
+    _items = [];
     try {
-      if (UserProvider.token != null&&!isFromList)
-        response = await http.get(Uri.parse(url), headers: {
-          'Authorization': '${UserProvider.token}',
-          'Accept': 'application/json',
-        },);
+      if (UserProvider.token != null && !isFromList)
+        response = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': '${UserProvider.token}',
+            'Accept': 'application/json',
+          },
+        );
       else
         response = await http.get(Uri.parse(url), headers: {
           'Accept': 'application/json',
-          'Authorization':'${UserProvider.token}'
+          'Authorization': '${UserProvider.token}'
         });
       var extractWorkData = json.decode(response.body);
       print('$extractWorkData extractWorkDataextractWorkData');
@@ -129,18 +129,17 @@ class PersonWorks extends ChangeNotifier {
       });
       _items = loadedWorks;
       notifyListeners();
-      if (loadedWorks == null || loadedWorks.isEmpty ||
+      if (loadedWorks == null ||
+          loadedWorks.isEmpty ||
           loadedWorks.length == 0) {
         return true;
       } else
         return false;
-    }catch(e){
+    } catch (e) {
       print('${e.toString()} person work error');
       return false;
     }
   }
-
-
 
   Future<bool> deleteDoctorWork(int id) async {
     var url = '${UserProvider.hostName}/api/user/achievement/$id';

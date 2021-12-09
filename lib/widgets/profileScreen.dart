@@ -16,7 +16,6 @@ import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/screens/maps/map-screen.dart';
-import '../screens/auth/LogScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

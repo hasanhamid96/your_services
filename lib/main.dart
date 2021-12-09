@@ -24,7 +24,7 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  OneSignal.shared.init("61b429b4-6688-4c6e-bba1-58ff8f469704", iOSSettings: {
+  OneSignal.shared.init("2131fbed-5890-46e5-9a19-c68f22b6bd09", iOSSettings: {
     OSiOSSettings.autoPrompt: false,
     OSiOSSettings.inAppLaunchUrl: false
   });

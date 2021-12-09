@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_cmoon_icons/flutter_cmoon_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:nice_button/NiceButton.dart';
 import 'package:your_services/model/socail.dart';
 import 'package:your_services/providers/user.dart';
@@ -35,21 +33,25 @@ class _SettingScreenState extends State<SettingScreen> {
   void getNotify() async {
     final prefs = await SharedPreferences.getInstance();
     if (mounted)
-      setState(() {
-        index = prefs.getBool('IsNotification') == null
-            ? true
-            : prefs.getBool('IsNotification');
-      });
+      setState(
+        () {
+          index = prefs.getBool('IsNotification') == null
+              ? true
+              : prefs.getBool('IsNotification');
+        },
+      );
   }
 
   void getLang() async {
     final prefs = await SharedPreferences.getInstance();
     if (mounted)
-      setState(() {
-        isArabic = prefs.getBool('isArabic') == null
-            ? true
-            : prefs.getBool('isArabic');
-      });
+      setState(
+        () {
+          isArabic = prefs.getBool('isArabic') == null
+              ? true
+              : prefs.getBool('isArabic');
+        },
+      );
   }
 
   @override
@@ -60,9 +62,11 @@ class _SettingScreenState extends State<SettingScreen> {
     getLang();
     // isLoad = true;
 
-    Provider.of<GetSocial>(context, listen: false).getSocial().whenComplete(() {
-      social = GetSocial.social;
-    });
+    Provider.of<GetSocial>(context, listen: false).getSocial().whenComplete(
+      () {
+        social = GetSocial.social;
+      },
+    );
   }
 
   @override
@@ -87,13 +91,15 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           width: MediaQuery.of(context).size.width * 0.67,
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Center(
-                  child: Text(
+            borderRadius: BorderRadius.circular(30),
+            child: Center(
+              child: Text(
                 'الأعدادت',
                 textDirection: ui.TextDirection.rtl,
                 style: Theme.of(context).textTheme.headline3,
-              ))),
+              ),
+            ),
+          ),
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -219,10 +225,11 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black38,
-                                    offset: Offset(10, 5),
-                                    blurRadius: 20,
-                                    spreadRadius: -10)
+                                  color: Colors.black38,
+                                  offset: Offset(10, 5),
+                                  blurRadius: 20,
+                                  spreadRadius: -10,
+                                ),
                               ],
                             ),
                             width: MediaQuery.of(context).size.width * 0.93,
@@ -237,10 +244,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                   ),
                                 ),
                                 Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text(
-                                      'ملفي الشخصي',
-                                    )),
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(
+                                    'ملفي الشخصي',
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -277,22 +285,25 @@ class _SettingScreenState extends State<SettingScreen> {
                                       },
                                     ),
                                     CupertinoButton(
-                                        child: Text("نعم",
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontFamily: 'Cairo-Regular',
-                                            )),
-                                        onPressed: () {
-                                          Provider.of<UserProvider>(context,
-                                                  listen: false)
-                                              .signOut();
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  StartScreen.routeName,
-                                                  (Route<dynamic> route) =>
-                                                      false);
-                                        }),
+                                      child: Text(
+                                        "نعم",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontFamily: 'Cairo-Regular',
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Provider.of<UserProvider>(context,
+                                                listen: false)
+                                            .signOut();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                                StartScreen.routeName,
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      },
+                                    ),
                                   ],
                                 );
                               },
@@ -343,10 +354,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black38,
-                              offset: Offset(10, 5),
-                              blurRadius: 20,
-                              spreadRadius: -10)
+                            color: Colors.black38,
+                            offset: Offset(10, 5),
+                            blurRadius: 20,
+                            spreadRadius: -10,
+                          )
                         ],
                       ),
                       width: MediaQuery.of(context).size.width * 0.93,
@@ -360,17 +372,19 @@ class _SettingScreenState extends State<SettingScreen> {
                               final prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setBool('IsNotification', value);
-                              setState(() {
-                                Toast.show(
-                                    !index
-                                        ? 'تم تفعيل الاشعارات'
-                                        : "تم الغاء تفعيل الاشعارات",
-                                    context,
-                                    duration: Toast.LENGTH_SHORT,
-                                    gravity: Toast.CENTER);
-                                index = value;
-                                print(index);
-                              });
+                              setState(
+                                () {
+                                  Toast.show(
+                                      !index
+                                          ? 'تم تفعيل الاشعارات'
+                                          : "تم الغاء تفعيل الاشعارات",
+                                      context,
+                                      duration: Toast.LENGTH_SHORT,
+                                      gravity: Toast.CENTER);
+                                  index = value;
+                                  print(index);
+                                },
+                              );
                               await OneSignal.shared.setSubscription(index);
                             },
                           ),
@@ -487,23 +501,25 @@ class _SettingScreenState extends State<SettingScreen> {
           // width: mediaQuery.width*0.4,
           height: height,
           child: Center(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              children: [
-                Image.asset(
-                  image,
-                  width: width - 10,
-                  height: height - 49,
-                ),
-                Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                children: [
+                  Image.asset(
+                    image,
+                    width: width - 10,
+                    height: height - 49,
+                  ),
+                  Center(
                     child: Text(
-                  text,
-                  style: Theme.of(context).textTheme.bodyText1,
-                )),
-              ],
+                      text,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
         ),
       ),
     );
@@ -516,187 +532,192 @@ class _SettingScreenState extends State<SettingScreen> {
     return showModalBottomSheet(
       context: context,
       builder: (context) => Container(
-          height: text == 'تابعنا' ? 400 : 300,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+        height: text == 'تابعنا' ? 400 : 300,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                if (text == 'من نحن')
                   Text(
-                    text,
-                    style: Theme.of(context).textTheme.headline2,
+                      'تطبيق خدماتك يمك يقدم كل ما يحتاجه البيت العراقي من خدمات صحيه،منزليه،نقل،خدمات بناء عن طريق افضل شركات البناء ،شركات سياحية،دليل مطاعم، حجوزات فنادق و غيرها من تسهيلات اخرى تكدر تحصله انت و بالبيت بدون تعب( اطباء ، عيادات ، مستشفيات ، محامين ، اسوق ، ) وغيرها',
+                      textAlign: TextAlign.center),
+                if (text == 'من نحن')
+                  Image.asset(
+                    'assets/images/sssssss.png',
+                    width: 200,
                   ),
-                  SizedBox(
-                    height: 20,
+                if (text == 'شاركنا')
+                  Text(
+                    'قم بمشاركة رابط التطبيق خدماتك يمك من خلال ارسالة الى اصدقائك واقاربك او مشاركة عبر وسائل التواصل الاجتماعي لكي تسهم في انجاح وتطوير العمل',
+                    textAlign: TextAlign.center,
                   ),
-                  if (text == 'من نحن')
-                    Text(
-                        'تطبيق خدماتك يمك يقدم كل ما يحتاجه البيت العراقي من خدمات صحيه،منزليه،نقل،خدمات بناء عن طريق افضل شركات البناء ،شركات سياحية،دليل مطاعم، حجوزات فنادق و غيرها من تسهيلات اخرى تكدر تحصله انت و بالبيت بدون تعب( اطباء ، عيادات ، مستشفيات ، محامين ، اسوق ، ) وغيرها',
-                        textAlign: TextAlign.center),
-                  if (text == 'من نحن')
-                    Image.asset(
-                      'assets/images/sssssss.png',
-                      width: 200,
-                    ),
-                  if (text == 'شاركنا')
-                    Text(
-                      'قم بمشاركة رابط التطبيق خدماتك يمك من خلال ارسالة الى اصدقائك واقاربك او مشاركة عبر وسائل التواصل الاجتماعي لكي تسهم في انجاح وتطوير العمل',
-                      textAlign: TextAlign.center,
-                    ),
-                  SizedBox(
-                    height: 25,
+                SizedBox(
+                  height: 25,
+                ),
+                if (text == 'شاركنا')
+                  NiceButton(
+                    // mini: true,
+                    text: 'مشاركة التطبيق',
+                    elevation: 8.0,
+                    radius: 50.0,
+                    gradientColors: [
+                      Colors.pinkAccent,
+                      Colors.deepPurpleAccent
+                    ],
+                    icon: CupertinoIcons.share,
+                    background: Colors.red,
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      await Share.share('${social.share}');
+                    },
                   ),
-                  if (text == 'شاركنا')
-                    NiceButton(
-                        // mini: true,
-                        text: 'مشاركة التطبيق',
-                        elevation: 8.0,
-                        radius: 50.0,
-                        gradientColors: [
-                          Colors.pinkAccent,
-                          Colors.deepPurpleAccent
-                        ],
-                        icon: CupertinoIcons.share,
-                        background: Colors.red,
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          await Share.share('${social.share}');
-                        }),
-                  if (text == 'تواصل معنا')
-                    Text(
-                      'يمكنكم التواصل معنا من خلال الضغط على زر الاتصال  حيث سنكون متواجدين على مدار الاسبوع',
-                      textAlign: TextAlign.center,
-                    ),
-                  if (text == 'تواصل معنا')
-                    SizedBox(
-                      height: 30,
-                    ),
-                  if (text == 'تواصل معنا')
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // NiceButton(
-                        //     width: 50,
-                        //     mini: true,
-                        //     elevation: 8.0,
-                        //     radius: 50.0,
-                        //     // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
-                        //     icon: FlutterIcons.whatsapp_faw,
-                        //     background: Colors.green,
-                        //     onPressed: ()async {
-                        //       Navigator.of(context).pop();
-                        //       await  whatsApp1();
-                        //     }),
-                        NiceButton(
-                            width: 50,
-                            mini: true,
-                            elevation: 8.0,
-                            radius: 50.0,
-                            // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
-                            icon: FlutterIcons.call_end_mdi,
-                            background: Colors.red,
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              launch("tel://${social.whatsApp1}");
-                            }),
-                      ],
-                    ),
-                  if (text == 'تابعنا')
-                    Text(
-                      'يمكنكم متابعتنا من خلال وسائل التواصل الاجتماعي لمعرفة اخر التحديثات المضافة لتطبيق وجميع انواع الخدمات  عبر صفحتنا على الفيس بوك و الانستغرام',
-                      textAlign: TextAlign.center,
-                    ),
+                if (text == 'تواصل معنا')
+                  Text(
+                    'يمكنكم التواصل معنا من خلال الضغط على زر الاتصال  حيث سنكون متواجدين على مدار الاسبوع',
+                    textAlign: TextAlign.center,
+                  ),
+                if (text == 'تواصل معنا')
                   SizedBox(
                     height: 30,
                   ),
-                  if (text == 'تابعنا')
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NiceButton(
-                            mini: true,
-                            width: 50,
-                            elevation: 8.0,
-                            radius: 50.0,
-                            // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
-                            icon: FlutterIcons.facebook_box_mco,
-                            background: Colors.blue,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              openFaceBook();
-                            }),
-                        NiceButton(
-                            width: 50,
-                            mini: true,
-                            elevation: 8.0,
-                            radius: 50.0,
-                            gradientColors: [
-                              Colors.pinkAccent,
-                              Colors.deepPurpleAccent
-                            ],
-                            icon: FlutterIcons.instagram_ant,
-                            background: Colors.red,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              openInstagram();
-                            }),
-                        NiceButton(
-                            width: 50,
-                            mini: true,
-                            elevation: 8.0,
-                            radius: 50.0,
-                            gradientColors: [Colors.redAccent, Colors.red[200]],
-                            icon: FlutterIcons.web_mco,
-                            background: Colors.red,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              openWebSite();
-                            }),
-                      ],
-                    ),
-                  SizedBox(
-                    height: 20,
+                if (text == 'تواصل معنا')
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // NiceButton(
+                      //     width: 50,
+                      //     mini: true,
+                      //     elevation: 8.0,
+                      //     radius: 50.0,
+                      //     // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
+                      //     icon: FlutterIcons.whatsapp_faw,
+                      //     background: Colors.green,
+                      //     onPressed: ()async {
+                      //       Navigator.of(context).pop();
+                      //       await  whatsApp1();
+                      //     }),
+                      NiceButton(
+                        width: 50,
+                        mini: true,
+                        elevation: 8.0,
+                        radius: 50.0,
+                        // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
+                        icon: FlutterIcons.call_end_mdi,
+                        background: Colors.red,
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          launch("tel://${social.whatsApp1}");
+                        },
+                      ),
+                    ],
                   ),
-                  if (text == 'تابعنا')
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NiceButton(
-                            width: 50,
-                            mini: true,
-                            elevation: 8.0,
-                            radius: 50.0,
-                            gradientColors: [
-                              Colors.lightBlue,
-                              Colors.lightBlue[200]
-                            ],
-                            icon: FlutterIcons.twitter_ant,
-                            background: Colors.lightBlue,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              openTwitter();
-                            }),
-                      ],
-                    ),
-                ],
-              ),
+                if (text == 'تابعنا')
+                  Text(
+                    'يمكنكم متابعتنا من خلال وسائل التواصل الاجتماعي لمعرفة اخر التحديثات المضافة لتطبيق وجميع انواع الخدمات  عبر صفحتنا على الفيس بوك و الانستغرام',
+                    textAlign: TextAlign.center,
+                  ),
+                SizedBox(
+                  height: 30,
+                ),
+                if (text == 'تابعنا')
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      NiceButton(
+                          mini: true,
+                          width: 50,
+                          elevation: 8.0,
+                          radius: 50.0,
+                          // gradientColors: [Colors.pinkAccent,Colors.deepPurpleAccent],
+                          icon: FlutterIcons.facebook_box_mco,
+                          background: Colors.blue,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            openFaceBook();
+                          }),
+                      NiceButton(
+                          width: 50,
+                          mini: true,
+                          elevation: 8.0,
+                          radius: 50.0,
+                          gradientColors: [
+                            Colors.pinkAccent,
+                            Colors.deepPurpleAccent
+                          ],
+                          icon: FlutterIcons.instagram_ant,
+                          background: Colors.red,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            openInstagram();
+                          }),
+                      NiceButton(
+                          width: 50,
+                          mini: true,
+                          elevation: 8.0,
+                          radius: 50.0,
+                          gradientColors: [Colors.redAccent, Colors.red[200]],
+                          icon: FlutterIcons.web_mco,
+                          background: Colors.red,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            openWebSite();
+                          }),
+                    ],
+                  ),
+                SizedBox(
+                  height: 20,
+                ),
+                if (text == 'تابعنا')
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      NiceButton(
+                        width: 50,
+                        mini: true,
+                        elevation: 8.0,
+                        radius: 50.0,
+                        gradientColors: [
+                          Colors.lightBlue,
+                          Colors.lightBlue[200]
+                        ],
+                        icon: FlutterIcons.twitter_ant,
+                        background: Colors.lightBlue,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          openTwitter();
+                        },
+                      ),
+                    ],
+                  ),
+              ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
   Social social = Social(
-      share: null,
-      youtube: null,
-      whatsApp2: null,
-      whatsApp1: null,
-      massenger: null,
-      instagram: null,
-      twitter: null,
-      id: null,
-      faceBook: null,
-      webSite: null);
+    share: null,
+    youtube: null,
+    whatsApp2: null,
+    whatsApp1: null,
+    massenger: null,
+    instagram: null,
+    twitter: null,
+    id: null,
+    faceBook: null,
+    webSite: null,
+  );
   var shareApp;
 
   Future<void> openFaceBook() async {
