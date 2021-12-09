@@ -264,71 +264,76 @@ class _MainScreenState extends State<MainScreen> {
   Widget loadShimmer(context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Shimmer(
-        enabled: true,
-        loop: 123,
-        period: Duration(seconds: 1),
-        gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.black12, Colors.grey],
-            tileMode: TileMode.repeated,
-            stops: [12.12, 123.3]),
-        direction: ShimmerDirection.rtl,
-        child: ListView.builder(
-            itemBuilder: (_, __) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    // color: Colors.blueGrey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          // padding:  EdgeInsets.only(right:8.0,
-                          //     ),
-                          width: mediaQuery.width * 0.6,
-                          height: 100,
-                          // margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            child: Card(
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(40),
-                                      bottomLeft: Radius.circular(40))),
-                              child: Column(
-                                children: [Text('      ')],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        elevation: 10,
+      enabled: true,
+      loop: 123,
+      period: Duration(seconds: 1),
+      gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.black12, Colors.grey],
+          tileMode: TileMode.repeated,
+          stops: [12.12, 123.3]),
+      direction: ShimmerDirection.rtl,
+      child: ListView.builder(
+        itemBuilder: (_, __) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              // color: Colors.blueGrey,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Container(
+                    // padding:  EdgeInsets.only(right:8.0,
+                    //     ),
+                    width: mediaQuery.width * 0.6,
+                    height: 100,
+                    // margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Card(
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(122),
-                                topRight: Radius.circular(122),
-                                bottomLeft: Radius.circular(122),
-                                topLeft: Radius.circular(122))),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(''),
-                          radius: 70,
-                          onBackgroundImageError: (exception, stackTrace) =>
-                              Icon(Icons.broken_image),
+                                topLeft: Radius.circular(40),
+                                bottomLeft: Radius.circular(40))),
+                        child: Column(
+                          children: [Text('      ')],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ))));
+                ),
+                Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(122),
+                      topRight: Radius.circular(122),
+                      bottomLeft: Radius.circular(122),
+                      topLeft: Radius.circular(122),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(''),
+                    radius: 70,
+                    onBackgroundImageError: (exception, stackTrace) =>
+                        Icon(Icons.broken_image),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

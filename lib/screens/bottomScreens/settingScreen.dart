@@ -16,6 +16,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:your_services/screens/auth/startScreen.dart';
+import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/widgets/profileScreen.dart';
 import 'dart:ui' as ui;
 
@@ -211,8 +212,12 @@ class _SettingScreenState extends State<SettingScreen> {
                         padding: EdgeInsets.only(top: 8, bottom: 8),
                         child: InkWell(
                           onTap: () {
+                            //old
+                            // Navigator.of(context).push(CupertinoPageRoute(
+                            //     builder: (context) => ProfileScreen()));
+                            //new
                             Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => ProfileScreen()));
+                                builder: (context) => Subscrption()));
                           },
                           highlightColor: Colors.yellowAccent,
                           splashColor: Colors.yellowAccent,

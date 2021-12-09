@@ -198,6 +198,8 @@ class _LogScreenState extends State<LogScreen> {
                               //   ),
                               // ));
                               //new
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .subsecrptions();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => Subscrption(),

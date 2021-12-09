@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import 'package:provider/provider.dart';
+import 'package:your_services/model/subscrption.dart';
+import 'package:your_services/providers/user.dart';
+
 List subscrption = [
   'باقة الثلاث اشهر ب 70\$',
   'باقة الستة اشهر ب  120\$',
@@ -74,48 +78,70 @@ class SubscrptionTybe extends StatefulWidget {
 
 class _SubscrptionTybeState extends State<SubscrptionTybe> {
   int selectedIndex = -1;
+  @override
+  void initState() {
+    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 420,
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: subscrption.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
-                child: Column(
+    var _model = Provider.of<UserProvider>(context, listen: true);
+    return FutureBuilder(
+      future: _model.subsecrptionsTybes(),
+      initialData: [],
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return SizedBox(
+            height: 420,
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
                   children: [
-                    SubscrptionItem(
-                      text: subscrption[index],
-                      color1: selectedIndex == index
-                          ? Colors.transparent
-                          : Colors.cyan,
-                      color2: selectedIndex == index
-                          ? Colors.transparent
-                          : Colors.blue,
-                      containerColor1:
-                          selectedIndex == index ? Colors.cyan : Colors.white,
-                      containerColor2:
-                          selectedIndex == index ? Colors.blue : Colors.white,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          SubscrptionItem(
+                            text: '${snapshot.data[index].name}' +
+                                ' ' +
+                                '${snapshot.data[index].dollar}' +
+                                '\$',
+                            color1: selectedIndex == index
+                                ? Colors.transparent
+                                : Colors.cyan,
+                            color2: selectedIndex == index
+                                ? Colors.transparent
+                                : Colors.blue,
+                            containerColor1: selectedIndex == index
+                                ? Colors.cyan
+                                : Colors.white,
+                            containerColor2: selectedIndex == index
+                                ? Colors.blue
+                                : Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           );
-        },
-      ),
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 }

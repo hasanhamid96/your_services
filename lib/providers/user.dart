@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_services/model/person.dart';
+import 'package:your_services/model/subscrption.dart';
+import 'package:your_services/screens/auth/subscription.dart';
 
 class UserProvider with ChangeNotifier {
   static String appName = 'basmazon';
@@ -27,6 +29,7 @@ class UserProvider with ChangeNotifier {
   static String token;
   static String address;
   static String approval = '0';
+  List subscrpion = [];
 
   double get latitudes {
     return latitude;
@@ -469,5 +472,41 @@ class UserProvider with ChangeNotifier {
         print(type);
       }
     }
+  }
+
+  // Future subsecrptions() async {
+  //   var response = await http.get(
+  //     Uri.parse(
+  //       'http://urservices.creativeapps.me/update/api/subscriptions',
+  //     ),
+  //     headers: {'Authorization': '$token', 'Accept': 'application/json'},
+  //   );
+
+  //   var data = json.decode(response.body);
+  //   List subs = data['subscriptions'];
+  //   subscrptions.add(subs);
+  //   print(
+  //       'ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg$subs');
+  //   notifyListeners();
+  // }
+
+  Future subsecrptionsTybes() async {
+    try {
+      var response = await http.get(
+        Uri.parse('http://urservices.creativeapps.me/update/api/subscriptions'),
+        headers: {'Authorization': '$token', 'Accept': 'application/json'},
+      );
+      var data = json.decode(response.body);
+      var myData = Subscrpion.fromJson(data);
+      var subList = myData.subscriptions;
+      print(
+          'subscrpionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn: ${subList.toString()}');
+      // return subList;
+
+      return subList;
+    } catch (e) {
+      print('e: $e');
+    }
+    notifyListeners();
   }
 }
