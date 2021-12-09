@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
-import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/user.dart';
 
-List subscrption = [
-  'باقة الثلاث اشهر ب 70\$',
-  'باقة الستة اشهر ب  120\$',
-  'باقة ال12 شهر ب 200\$',
-];
+int subscrptionId;
 
 class Subscrption extends StatelessWidget {
   @override
@@ -61,7 +56,10 @@ class Subscrption extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await Provider.of<UserProvider>(context, listen: false)
+                      .userSubscrption(subscrptionId);
+                },
               ),
             ),
           ],
@@ -107,7 +105,10 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
                       onTap: () {
                         setState(() {
                           selectedIndex = index;
+                          subscrptionId = snapshot.data[index].id;
                         });
+                        print(
+                            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
                       },
                       child: Column(
                         children: [

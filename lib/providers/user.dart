@@ -29,7 +29,6 @@ class UserProvider with ChangeNotifier {
   static String token;
   static String address;
   static String approval = '0';
-  List subscrpion = [];
 
   double get latitudes {
     return latitude;
@@ -504,6 +503,24 @@ class UserProvider with ChangeNotifier {
       // return subList;
 
       return subList;
+    } catch (e) {
+      print('e: $e');
+    }
+    notifyListeners();
+  }
+
+  Future userSubscrption(int id) async {
+    try {
+      var response = await http.post(
+        Uri.parse(
+            'https://urservices.creativeapps.me/update/api/user/subscribe'),
+        body: {'subscription_id': '1'},
+        headers: {'Authorization': '$token', 'Accept': 'application/json'},
+      );
+      var data = json.decode(response.body);
+
+      print(
+          '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
     } catch (e) {
       print('e: $e');
     }

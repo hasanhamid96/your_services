@@ -92,10 +92,11 @@ class _LogScreenState extends State<LogScreen> {
                         text:
                             'الرجاء قراءة الشروط والاحكام بالكامل لضمان حقوقك ومسؤلياتك عند قيامك باستخدام المحتوى المتوفر\n',
                         style: TextStyle(
-                            color: Colors.purple[200],
-                            fontFamily: 'Cairo-Regular',
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                          color: Colors.purple[200],
+                          fontFamily: 'Cairo-Regular',
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       TextSpan(
                           text: '١-',
@@ -199,7 +200,8 @@ class _LogScreenState extends State<LogScreen> {
                               // ));
                               //new
                               Provider.of<UserProvider>(context, listen: false)
-                                  .subsecrptions();
+                                  .subsecrptionsTybes();
+
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => Subscrption(),
