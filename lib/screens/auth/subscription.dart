@@ -2,70 +2,85 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
+import 'package:your_services/helper/flushDialog.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 
 int subscrptionId;
 
 class Subscrption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'اختر نوع الاشتراك',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-              ),
-              textDirection: ui.TextDirection.rtl,
-            ),
-            SubscrptionTybe(),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text('الرجاء الدفع عند اقرب منفذ كي كارد'),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Colors.cyan, Colors.blue]),
-                  borderRadius: BorderRadius.circular(10.0)),
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.transparent),
+    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes();
 
-                // style: ButtonStyle(
-                //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                //     RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //   ),
-                // ),
-                child: Text(
-                  'موافق',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () async {
-                  await Provider.of<UserProvider>(context, listen: false)
-                      .userSubscrption(subscrptionId);
-                },
-              ),
+    return Scaffold(
+        body: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'اختر نوع الاشتراك',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
             ),
-          ],
-        ),
+            textDirection: ui.TextDirection.rtl,
+          ),
+          SubscrptionTybe(),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text('الرجاء الدفع عند اقرب منفذ كي كارد'),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [Colors.cyan, Colors.blue]),
+                borderRadius: BorderRadius.circular(10.0)),
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.transparent),
+
+              // style: ButtonStyle(
+              //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //     RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //   ),
+              // ),
+              child: Text(
+                'موافق',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () async {
+                if (subscrptionId == null) {
+                  FlushDialog.flushDialog(context, 'لم يتم اكمال التسجيل',
+                      'يرجى اختبار باقة الاشتراك ');
+                } else {
+                  await Provider.of<UserProvider>(context, listen: false)
+                      .userSubscrption(id: subscrptionId);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => WatingApprovelScreen(
+                        id: subscrptionId,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
-    );
+    ));
   }
 }
 

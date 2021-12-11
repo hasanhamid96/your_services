@@ -59,8 +59,11 @@ class UserProvider with ChangeNotifier {
       playerId = prefs.getString('playerId');
     }
 
-    var url = Uri.parse("${UserProvider.hostName}/api/user/register");
-    var request = http.MultipartRequest("POST", (url));
+    var url = Uri.parse("${UserProvider.hostName}/update/api/user/register");
+    var request = http.MultipartRequest(
+      "POST",
+      (url),
+    );
 
     try {
       print("how are you mr");
@@ -129,11 +132,6 @@ class UserProvider with ChangeNotifier {
     city_id,
     section_id,
   }) async {
-    print('1 $image');
-    print('1 $name');
-    print('2 $password');
-    print('3 $phone');
-
     final prefs = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
@@ -142,7 +140,7 @@ class UserProvider with ChangeNotifier {
       playerId = prefs.getString('playerId');
     }
 
-    var url = Uri.parse("${UserProvider.hostName}/api/user/register");
+    var url = Uri.parse("${UserProvider.hostName}/update/api/user/register");
     var request = http.MultipartRequest("POST", (url));
 
     try {
@@ -201,7 +199,9 @@ class UserProvider with ChangeNotifier {
         prefs.setInt('$appName' + '_' + 'section_id',
             extractedProfile['user']['section_id']);
         prefs.setInt(
-            '$appName' + '_' + 'city_id', extractedProfile['user']['city_id']);
+          '$appName' + '_' + 'city_id',
+          extractedProfile['user']['city_id'],
+        );
         prefs.setInt('$appName' + '_' + 'approval',
             extractedProfile['user']['approval']);
         token = extractedProfile['user']['token'];
@@ -216,7 +216,15 @@ class UserProvider with ChangeNotifier {
         return extractedProfile['msg'].toString();
       }
       if (response.statusCode == 200) {
-        isLogged = true;
+        print('1 $image');
+        print('1 $name');
+        print('2 $password');
+        print('3 $phone');
+        print('4 ${approval.toString()}');
+        print('5 $type');
+        print('6 $token');
+        print('7${playerId.toString()}');
+        // isLogged = true;
         print('success');
         return 'true';
       }
@@ -236,7 +244,7 @@ class UserProvider with ChangeNotifier {
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
     var retuningData;
-    print(playerId.toString());
+
     print(phone.toString());
     print(password.toString());
 
@@ -509,7 +517,9 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future userSubscrption(int id) async {
+  Future userSubscrption({int id}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     try {
       var response = await http.post(
         Uri.parse(
@@ -518,7 +528,8 @@ class UserProvider with ChangeNotifier {
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
-
+      prefs.setInt(
+          '$appName' + '_' + 'approval', extractedProfile['user']['approval']);
       print(
           '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
     } catch (e) {

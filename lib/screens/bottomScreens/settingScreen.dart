@@ -213,11 +213,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: InkWell(
                           onTap: () {
                             //old
-                            // Navigator.of(context).push(CupertinoPageRoute(
-                            //     builder: (context) => ProfileScreen()));
-                            //new
                             Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => Subscrption()));
+                                builder: (context) => ProfileScreen()));
+                            //new
+                            // Navigator.of(context).push(CupertinoPageRoute(
+                            //     builder: (context) => Subscrption()));
                           },
                           highlightColor: Colors.yellowAccent,
                           splashColor: Colors.yellowAccent,

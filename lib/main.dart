@@ -11,6 +11,7 @@ import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/person_works.dart';
 import 'package:your_services/providers/persons.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 import 'package:your_services/screens/maps/map-screen.dart';
 import 'package:your_services/screens/works/works_details.dart';
 import 'model/banner.dart';
@@ -155,23 +156,38 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> initializePlayer() async {
     _controller = VideoPlayerController.asset('assets/images/sss.mp4');
-    await Future.wait([
-      _controller.initialize().then((value) => _controller.addListener(() {
-            //custom Listner
-            setState(() {
-              if (_controller.value.duration == _controller.value.position) {
-                print(
-                    'video compeleteeed'); //checking the duration and position every time
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => UserProvider.token == null
-                      ? StartScreen()
-                      : BottomNavBar(),
-                ));
-                setState(() {});
-              }
-            });
-          })),
-    ]);
+    await Future.wait(
+      [
+        _controller.initialize().then(
+              (value) => _controller.addListener(
+                () {
+                  //custom Listner
+                  setState(() {
+                    if (_controller.value.duration ==
+                        _controller.value.position) {
+                      print(
+                          'video compeleteeed'); //checking the duration and position every time
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => UserProvider.token != null &&
+                                  UserProvider.type == 'provider' &&
+                                  UserProvider.approval == '0'
+                              ? WatingApprovelScreen()
+                              : UserProvider.token == null
+                                  ? StartScreen()
+                                  : BottomNavBar(),
+                        ),
+                      );
+                      setState(
+                        () {},
+                      );
+                    }
+                  });
+                },
+              ),
+            ),
+      ],
+    );
     _createChewieController();
     setState(() {});
   }
@@ -240,11 +256,17 @@ class _SplashScreenState extends State<SplashScreen> {
                   highlightedBorderColor: Colors.white,
                   onPressed: () {
                     // Navigator.of(context).pushReplacementNamed('ss');
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => UserProvider.token == null
-                          ? StartScreen()
-                          : BottomNavBar(),
-                    ));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => UserProvider.token != null &&
+                                UserProvider.type == 'provider' &&
+                                UserProvider.approval == '0'
+                            ? WatingApprovelScreen()
+                            : UserProvider.token == null
+                                ? StartScreen()
+                                : BottomNavBar(),
+                      ),
+                    );
                   },
                   child: Text(
                     'تخطي',

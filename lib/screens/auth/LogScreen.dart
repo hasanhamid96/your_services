@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
@@ -17,6 +16,7 @@ import 'package:your_services/providers/cities.dart';
 import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/subscription.dart';
+import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 import 'package:your_services/widgets/curvePainter.dart';
 import '../bottomScreens/bottomNavBar.dart';
 import '../maps/map-screen.dart';
@@ -165,39 +165,42 @@ class _LogScreenState extends State<LogScreen> {
                           fontSize: 13),
                     )),
                 CupertinoActionSheetAction(
-                    isDefaultAction: true,
-                    onPressed: () {
-                      var isValid = _key.currentState.validate();
-                      if (isValid) {
-                        _key.currentState.save();
-                        if (isUser) {
-                          setStates(() => isLogging = true);
-                          print('registering Craft...');
-                          Provider.of<UserProvider>(context, listen: false)
-                              .registerCraft(
-                            name: name,
-                            password: pass,
-                            phone: phone,
-                            city_id: city_id,
-                            section_id: section_id,
-                            file: imagePicked,
-                            image: _image,
-                            address: address,
-                          )
-                              .then((value) {
+                  isDefaultAction: true,
+                  onPressed: () {
+                    var isValid = _key.currentState.validate();
+                    if (isValid) {
+                      _key.currentState.save();
+                      if (isUser) {
+                        //old
+                        // setStates(() => isLogging = true);
+                        //new
+                        // setStates(() => isLogging = true);
+                        print('registering Craft...');
+                        Provider.of<UserProvider>(context, listen: false)
+                            .registerCraft(
+                          name: name,
+                          password: pass,
+                          phone: phone,
+                          city_id: city_id,
+                          section_id: section_id,
+                          file: imagePicked,
+                          image: _image,
+                          address: address,
+                        )
+                            .then(
+                          (value) {
                             if (value == 'true') {
                               setStates(() {
-                                signing = false;
-                                isLogging = false;
+                                // signing = false;
+                                // isLogging = false;
                               });
                               Navigator.of(context).pop();
                               //old
-                              //       Navigator.of(context)
-                              //     .pushReplacement(MaterialPageRoute(
-                              //   builder: (context) => BottomNavBar(
-                              //     islogining: true,
-                              //   ),
-                              // ));
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => WatingApprovelScreen(),
+                                ),
+                              );
                               //new
                               Provider.of<UserProvider>(context, listen: false)
                                   .subsecrptionsTybes();
@@ -205,6 +208,43 @@ class _LogScreenState extends State<LogScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => Subscrption(),
+                                ),
+                              );
+                            } else {
+                              setStates(
+                                () {
+                                  signing = false;
+                                  isLogging = false;
+                                },
+                              );
+                              FlushDialog.flushDialog(
+                                  context,
+                                  'لم يتم عملية التسجيل',
+                                  '${value == null ? 'يرجى محاولة مرة اخرى' : value}');
+                            }
+                          },
+                        );
+                      } else {
+                        setStates(() => isLogging = true);
+                        print('registering User...');
+                        Provider.of<UserProvider>(context, listen: false)
+                            .registerUser(
+                                name: name,
+                                password: pass,
+                                phone: phone,
+                                birthday: _currentDate.toString(),
+                                genderr: _genderString)
+                            .then(
+                          (value) {
+                            if (value == 'true') {
+                              setStates(() {
+                                signing = false;
+                                isLogging = false;
+                              });
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => BottomNavBar(),
                                 ),
                               );
                             } else {
@@ -217,51 +257,22 @@ class _LogScreenState extends State<LogScreen> {
                                   'لم يتم عملية التسجيل',
                                   '${value == null ? 'يرجى محاولة مرة اخرى' : value}');
                             }
-                          });
-                        } else {
-                          setStates(() => isLogging = true);
-                          print('registering User...');
-                          Provider.of<UserProvider>(context, listen: false)
-                              .registerUser(
-                                  name: name,
-                                  password: pass,
-                                  phone: phone,
-                                  birthday: _currentDate.toString(),
-                                  genderr: _genderString)
-                              .then((value) {
-                            if (value == 'true') {
-                              setStates(() {
-                                signing = false;
-                                isLogging = false;
-                              });
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
-                                builder: (context) => BottomNavBar(),
-                              ));
-                            } else {
-                              setStates(() {
-                                signing = false;
-                                isLogging = false;
-                              });
-                              FlushDialog.flushDialog(
-                                  context,
-                                  'لم يتم عملية التسجيل',
-                                  '${value == null ? 'يرجى محاولة مرة اخرى' : value}');
-                            }
-                          });
-                        }
+                          },
+                        );
                       }
-                    },
-                    child: isLogging
-                        ? Center(child: CupertinoActivityIndicator())
-                        : Text(
-                            'قبول وتسجيل',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontFamily: 'Cairo-Regular',
-                                fontSize: 13),
-                          )),
+                    }
+                  },
+                  child: isLogging
+                      ? Center(child: CupertinoActivityIndicator())
+                      : Text(
+                          'قبول وتسجيل',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontFamily: 'Cairo-Regular',
+                            fontSize: 13,
+                          ),
+                        ),
+                ),
               ],
             ),
           ),
@@ -283,25 +294,29 @@ class _LogScreenState extends State<LogScreen> {
               setState(() {
                 signing = false;
               });
-            }).then((value) {
-              if (value == 'login success') {
-                setState(() {
-                  signing = false;
-                });
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => BottomNavBar(),
-                ));
-              } else {
-                FlushDialog.flushDialog(
-                  context,
-                  'لم يتم عملية تسجيل الدخول',
-                  '$value',
-                );
-                setState(() {
-                  signing = false;
-                });
-              }
-            });
+            }).then(
+              (value) {
+                if (value == 'login success') {
+                  setState(() {
+                    signing = false;
+                  });
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => BottomNavBar(),
+                  ));
+                } else {
+                  FlushDialog.flushDialog(
+                    context,
+                    'لم يتم عملية تسجيل الدخول',
+                    '$value',
+                  );
+                  setState(
+                    () {
+                      signing = false;
+                    },
+                  );
+                }
+              },
+            );
           }
         }
       }
@@ -313,24 +328,32 @@ class _LogScreenState extends State<LogScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      isUser = widget.isUser;
-      isLogin = widget.isLogin;
-    });
+    setState(
+      () {
+        isUser = widget.isUser;
+        isLogin = widget.isLogin;
+      },
+    );
     isLoadingCities = true;
     isLoadingSections = true;
-    Provider.of<Cities>(context, listen: false).fetchDataCity().then((value) {
-      if (mounted)
-        setState(() {
-          isLoadingCities = false;
-        });
-    });
-    Provider.of<Sections>(context, listen: false).fetchSections().then((value) {
-      if (mounted)
-        setState(() {
-          isLoadingSections = false;
-        });
-    });
+    Provider.of<Cities>(context, listen: false).fetchDataCity().then(
+      (value) {
+        if (mounted)
+          setState(() {
+            isLoadingCities = false;
+          });
+      },
+    );
+    Provider.of<Sections>(context, listen: false).fetchSections().then(
+      (value) {
+        if (mounted)
+          setState(
+            () {
+              isLoadingSections = false;
+            },
+          );
+      },
+    );
   }
 
   bool signing = false;
@@ -350,16 +373,22 @@ class _LogScreenState extends State<LogScreen> {
     bool isMapSel = false;
     Completer<GoogleMapController> completer;
     void getLat(double lat, double long) {
-      setState(() {
-        isMapSel = true;
-        longe = long;
-        late = lat;
-        Future.delayed(Duration(seconds: 2)).then((value) {
-          setState(() {
-            isMapSel = false;
-          });
-        });
-      });
+      setState(
+        () {
+          isMapSel = true;
+          longe = long;
+          late = lat;
+          Future.delayed(Duration(seconds: 2)).then(
+            (value) {
+              setState(
+                () {
+                  isMapSel = false;
+                },
+              );
+            },
+          );
+        },
+      );
     }
 
     return Material(
@@ -386,8 +415,9 @@ class _LogScreenState extends State<LogScreen> {
             elevation: 0,
             backgroundColor: Colors.transparent,
             leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_sharp),
-                onPressed: () => Navigator.pop(context)),
+              icon: Icon(Icons.arrow_back_ios_sharp),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
           body: SingleChildScrollView(
               child: Column(
@@ -939,7 +969,7 @@ class _LogScreenState extends State<LogScreen> {
     'ذكر',
     'أنثى',
   ];
-  var _genderString = 'ذكر';
+  var _genderString = '';
   Widget dropDwon(BuildContext context, List<String> items, String hint) {
     return Center(
       child: Container(
