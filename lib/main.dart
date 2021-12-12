@@ -151,10 +151,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    initializePlayer();
+    final userPro=Provider.of<UserProvider>(context,listen: false);
+    userPro.checkLogin();
+    initializePlayer(userPro);
   }
 
-  Future<void> initializePlayer() async {
+  Future<void> initializePlayer(userPro) async {
     _controller = VideoPlayerController.asset('assets/images/sss.mp4');
     await Future.wait(
       [
@@ -169,13 +171,14 @@ class _SplashScreenState extends State<SplashScreen> {
                           'video compeleteeed'); //checking the duration and position every time
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => UserProvider.token != null &&
-                                  UserProvider.type == 'provider' &&
-                                  UserProvider.approval == '0'
+                          builder: (context) =>
+                          (UserProvider.token != null &&
+                              userPro.loginType == 'provider' &&
+                              UserProvider.approval == '0')
                               ? WatingApprovelScreen()
                               : UserProvider.token == null
-                                  ? StartScreen()
-                                  : BottomNavBar(),
+                              ? StartScreen()
+                              : BottomNavBar(),
                         ),
                       );
                       setState(
@@ -208,6 +211,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userPro=Provider.of<UserProvider>(context);
+    userPro.checkLogin();
+
     return Material(
         color: Colors.transparent,
         child: Container(
@@ -223,7 +229,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   fit: BoxFit.cover,
                   child: _chewieController != null &&
                           _chewieController
-                              .videoPlayerController.value.isInitialized
+                              .videoPlayerController.value.initialized
                       ? Chewie(
                           controller: _chewieController,
                         )
@@ -258,9 +264,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     // Navigator.of(context).pushReplacementNamed('ss');
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => UserProvider.token != null &&
-                                UserProvider.type == 'provider' &&
-                                UserProvider.approval == '0'
+                        builder: (context) =>
+                            (UserProvider.token != null &&
+                                userPro.loginType == 'provider' &&
+                                UserProvider.approval == '0')
                             ? WatingApprovelScreen()
                             : UserProvider.token == null
                                 ? StartScreen()

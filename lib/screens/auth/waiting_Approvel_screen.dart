@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/screens/bottomScreens/bottomNavBar.dart';
 
@@ -42,6 +43,7 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userPro=Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -86,6 +88,11 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
+
+                FlatButton(onPressed: (){
+                  userPro.signOut();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StartScreen(),));
+                }, child: Text('logout'))
               ],
             ),
           ),

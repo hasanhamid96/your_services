@@ -3,15 +3,32 @@ import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
 import 'package:your_services/helper/flushDialog.dart';
+import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 
 int subscrptionId;
 
-class Subscrption extends StatelessWidget {
+class Subscrption extends StatefulWidget {
+  @override
+  _SubscrptionState createState() => _SubscrptionState();
+}
+
+class _SubscrptionState extends State<Subscrption> {
+
+
+
+  List<Subscriptions> subscriptions=[];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes().then((value){
+      subscriptions=value;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes();
 
     return Scaffold(
         body: Padding(
@@ -84,6 +101,8 @@ class Subscrption extends StatelessWidget {
   }
 }
 
+
+
 class SubscrptionTybe extends StatefulWidget {
   @override
   State<SubscrptionTybe> createState() => _SubscrptionTybeState();
@@ -91,73 +110,68 @@ class SubscrptionTybe extends StatefulWidget {
 
 class _SubscrptionTybeState extends State<SubscrptionTybe> {
   int selectedIndex = -1;
+  List<Subscriptions> subscriptions=[];
+
   @override
   void initState() {
-    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes();
+    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes().then((value){
+    setState(() {
+      subscriptions=value;
+    });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var _model = Provider.of<UserProvider>(context, listen: true);
-    return FutureBuilder(
-      future: _model.subsecrptionsTybes(),
-      initialData: [],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return SizedBox(
-            height: 420,
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
+    // var _model = Provider.of<UserProvider>(context, listen: true);
+    return SizedBox(
+      height: 420,
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        itemCount:subscriptions.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                    subscrptionId =subscriptions[index].id;
+                  });
+                  print(
+                      'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
+                },
+                child: Column(
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = index;
-                          subscrptionId = snapshot.data[index].id;
-                        });
-                        print(
-                            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
-                      },
-                      child: Column(
-                        children: [
-                          SubscrptionItem(
-                            text: '${snapshot.data[index].name}' +
-                                ' ' +
-                                '${snapshot.data[index].dollar}' +
-                                '\$',
-                            color1: selectedIndex == index
-                                ? Colors.transparent
-                                : Colors.cyan,
-                            color2: selectedIndex == index
-                                ? Colors.transparent
-                                : Colors.blue,
-                            containerColor1: selectedIndex == index
-                                ? Colors.cyan
-                                : Colors.white,
-                            containerColor2: selectedIndex == index
-                                ? Colors.blue
-                                : Colors.white,
-                          ),
-                        ],
-                      ),
+                    SubscrptionItem(
+                      text: '${subscriptions[index].name}' +
+                          ' ' +
+                          '${subscriptions[index].dollar}' +
+                          '\$',
+                      color1: selectedIndex == index
+                          ? Colors.transparent
+                          : Colors.cyan,
+                      color2: selectedIndex == index
+                          ? Colors.transparent
+                          : Colors.blue,
+                      containerColor1: selectedIndex == index
+                          ? Colors.cyan
+                          : Colors.white,
+                      containerColor2: selectedIndex == index
+                          ? Colors.blue
+                          : Colors.white,
                     ),
                   ],
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        return const CircularProgressIndicator();
-      },
+        },
+      ),
     );
   }
 }

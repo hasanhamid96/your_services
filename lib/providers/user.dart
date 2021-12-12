@@ -24,6 +24,9 @@ class UserProvider with ChangeNotifier {
   static String gender;
   static String Image;
   static String type;
+   String _loginType;
+
+  String get loginType => _loginType;
   static Uint8List imageMemory;
   static int userId;
   static String token;
@@ -444,9 +447,11 @@ class UserProvider with ChangeNotifier {
 
   bool once = false;
   checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (once == false) {
       once = true;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+
       if (prefs.containsKey('$appName' + '_' + 'token')) {
         if (prefs.getString('$appName' + '_' + "type").toString() ==
             'provider') {
@@ -479,6 +484,10 @@ class UserProvider with ChangeNotifier {
         print(type);
       }
     }
+
+
+    _loginType=prefs.getString('$appName' + '_' + "type");
+    notifyListeners();
   }
 
   // Future subsecrptions() async {
@@ -497,17 +506,18 @@ class UserProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
+
   Future subsecrptionsTybes() async {
     try {
       var response = await http.get(
-        Uri.parse('http://urservices.creativeapps.me/update/api/subscriptions'),
+        Uri.parse('$hostName/update/api/subscriptions'),
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
       var myData = Subscrpion.fromJson(data);
       var subList = myData.subscriptions;
       print(
-          'subscrpionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn: ${subList.toString()}');
+          ': ${subList.toString()}');
       // return subList;
 
       return subList;
