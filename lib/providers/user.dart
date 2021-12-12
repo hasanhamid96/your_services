@@ -24,14 +24,15 @@ class UserProvider with ChangeNotifier {
   static String gender;
   static String Image;
   static String type;
-   String _loginType;
+  String _loginType;
 
   String get loginType => _loginType;
   static Uint8List imageMemory;
   static int userId;
   static String token;
   static String address;
-  static String approval = '0';
+  static String _approval;
+  String get approval => _approval;
 
   double get latitudes {
     return latitude;
@@ -212,7 +213,7 @@ class UserProvider with ChangeNotifier {
         userPhone = phone;
         userId = extractedProfile['user']['id'];
         Image = extractedProfile['user']['photo'];
-        approval = extractedProfile['user']['approval'].toString();
+        _approval = extractedProfile['user']['approval'].toString();
         type = 'provider';
         prefs.setString('$appName' + '_' + 'type', 'provider');
       } else {
@@ -294,7 +295,7 @@ class UserProvider with ChangeNotifier {
               extractedProfile['user']['approval']);
           Image = extractedProfile['user']['photo'];
           address = extractedProfile['user']['address'];
-          approval = extractedProfile['user']['approval'].toString();
+          _approval = extractedProfile['user']['approval'].toString();
         }
         notifyListeners();
         retuningData = 'login success';
@@ -341,7 +342,7 @@ class UserProvider with ChangeNotifier {
         ),
       );
       prefs.setString('$appName' + '_' + 'approval', person.approval);
-      approval = person.approval;
+      _approval = person.approval;
 
       if (data4['status'] == true) {
         finalLoadedPerson = loadedPerson;
@@ -426,7 +427,7 @@ class UserProvider with ChangeNotifier {
     prefs.remove('$appName' + '_' + "token");
     prefs.remove('$appName' + '_' + "type");
     prefs.remove('$appName' + '_' + "id");
-    approval = null;
+    _approval = null;
     token = null;
     userName = null;
     userPhone = null;
@@ -462,7 +463,7 @@ class UserProvider with ChangeNotifier {
           userPhone = prefs.getString('$appName' + '_' + "phone");
           userId = prefs.getInt('$appName' + '_' + "id");
           token = prefs.getString('$appName' + '_' + "token");
-          approval = prefs.getString('$appName' + '_' + "approval").toString();
+          _approval = prefs.getString('$appName' + '_' + "approval").toString();
           address = prefs.getString('$appName' + '_' + "address");
           type = 'provider';
           latitude = prefs.getString('$appName' + '_' + "lat") != null
@@ -485,8 +486,7 @@ class UserProvider with ChangeNotifier {
       }
     }
 
-
-    _loginType=prefs.getString('$appName' + '_' + "type");
+    _loginType = prefs.getString('$appName' + '_' + "type");
     notifyListeners();
   }
 
@@ -506,7 +506,6 @@ class UserProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-
   Future subsecrptionsTybes() async {
     try {
       var response = await http.get(
@@ -516,8 +515,7 @@ class UserProvider with ChangeNotifier {
       var data = json.decode(response.body);
       var myData = Subscrpion.fromJson(data);
       var subList = myData.subscriptions;
-      print(
-          ': ${subList.toString()}');
+      print(': ${subList.toString()}');
       // return subList;
 
       return subList;

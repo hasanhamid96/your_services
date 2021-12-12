@@ -33,7 +33,7 @@ dependencies:
   infinite_scroll_pagination:
   http:
   shimmer: ^2.0.0
-  image_picker: ^0.8.1
+  image_picker: ^0.8.4+4
   intl:
   shared_preferences: ^2.0.6
   onesignal_flutter: ^2.6.1
@@ -46,7 +46,7 @@ dependencies:
   google_maps_flutter: ^2.0.0
   flutter_cmoon_icons: ^0.1.0
   geolocator: 7.6.2
-  chewie: ^0.12.2
+  chewie: ^1.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

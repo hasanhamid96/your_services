@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/LogScreen.dart';
@@ -73,7 +74,9 @@ class _BottomNavBarState extends State<BottomNavBar>
                   FloatingActionButton(
                     backgroundColor: CupertinoColors.systemYellow,
                     onPressed: () {
-                      if (UserProvider.approval == '0' &&
+                      if (Provider.of<UserProvider>(context, listen: false)
+                                  .approval ==
+                              '0' &&
                           UserProvider.token != null)
                         Toast.show(
                             ' لاتستطيع اضافة اعمال حسابك غير مفعل', context);

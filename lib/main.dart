@@ -151,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    final userPro=Provider.of<UserProvider>(context,listen: false);
+    final userPro = Provider.of<UserProvider>(context, listen: false);
     userPro.checkLogin();
     initializePlayer(userPro);
   }
@@ -171,14 +171,13 @@ class _SplashScreenState extends State<SplashScreen> {
                           'video compeleteeed'); //checking the duration and position every time
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) =>
-                          (UserProvider.token != null &&
-                              userPro.loginType == 'provider' &&
-                              UserProvider.approval == '0')
+                          builder: (context) => (UserProvider.token != null &&
+                                  userPro.loginType == 'provider' &&
+                                  userPro.approval == '0')
                               ? WatingApprovelScreen()
                               : UserProvider.token == null
-                              ? StartScreen()
-                              : BottomNavBar(),
+                                  ? StartScreen()
+                                  : BottomNavBar(),
                         ),
                       );
                       setState(
@@ -211,78 +210,78 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userPro=Provider.of<UserProvider>(context);
+    final userPro = Provider.of<UserProvider>(context);
     userPro.checkLogin();
 
     return Material(
-        color: Colors.transparent,
-        child: Container(
-          height: MediaQuery.of(context).size.height * 2,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                top: 0,
-                bottom: -30,
-                left: -30,
-                right: -30,
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: _chewieController != null &&
-                          _chewieController
-                              .videoPlayerController.value.initialized
-                      ? Chewie(
-                          controller: _chewieController,
-                        )
-                      : Scaffold(
-                          body: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Center(child: CircularProgressIndicator()),
-                              SizedBox(height: 20),
-                              Text('Loading'),
-                            ],
-                          ),
+      color: Colors.transparent,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 2,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              top: 0,
+              bottom: -30,
+              left: -30,
+              right: -30,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: _chewieController != null &&
+                        _chewieController
+                            .videoPlayerController.value.isInitialized
+                    ? Chewie(
+                        controller: _chewieController,
+                      )
+                    : Scaffold(
+                        body: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Center(child: CircularProgressIndicator()),
+                            SizedBox(height: 20),
+                            Text('Loading'),
+                          ],
                         ),
-                ),
-              ),
-              Positioned(
-                bottom: 5,
-                right: 5,
-                child: OutlineButton(
-                  borderSide: BorderSide(
-                    width: 1.0,
-                    color: Colors.white,
-                    style: BorderStyle.solid,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  color: Colors.white,
-                  disabledBorderColor: Colors.white,
-                  highlightedBorderColor: Colors.white,
-                  onPressed: () {
-                    // Navigator.of(context).pushReplacementNamed('ss');
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            (UserProvider.token != null &&
-                                userPro.loginType == 'provider' &&
-                                UserProvider.approval == '0')
-                            ? WatingApprovelScreen()
-                            : UserProvider.token == null
-                                ? StartScreen()
-                                : BottomNavBar(),
                       ),
-                    );
-                  },
-                  child: Text(
-                    'تخطي',
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              right: 5,
+              child: OutlineButton(
+                borderSide: BorderSide(
+                  width: 1.0,
+                  color: Colors.white,
+                  style: BorderStyle.solid,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                color: Colors.white,
+                disabledBorderColor: Colors.white,
+                highlightedBorderColor: Colors.white,
+                onPressed: () {
+                  // Navigator.of(context).pushReplacementNamed('ss');
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => (UserProvider.token != null &&
+                              userPro.loginType == 'provider' &&
+                              userPro.approval == '0')
+                          ? WatingApprovelScreen()
+                          : UserProvider.token == null
+                              ? StartScreen()
+                              : BottomNavBar(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'تخطي',
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
