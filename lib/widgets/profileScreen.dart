@@ -880,15 +880,6 @@ class CurvePainter extends CustomPainter {
     var paint = Paint();
     paint = Paint()..color = Color.fromRGBO(79, 173, 236, 1.0);
     paint.style = PaintingStyle.fill;
-    // paint
-    //   ..shader= ui.Gradient.linear(
-    //   Offset(0,0),
-    //   Offset(0,0),
-    //   [
-    //     Colors.blue,
-    //     Colors.red,
-    //   ],
-    // );
     Path path = Path();
     path.moveTo(0, 0);
     path.lineTo(0, size.height);
