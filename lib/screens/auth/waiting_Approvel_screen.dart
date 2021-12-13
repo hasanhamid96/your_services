@@ -27,7 +27,8 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed)
-      Provider.of<UserProvider>(context, listen: false).userSubscrption(id: 1);
+      Provider.of<UserProvider>(context, listen: false)
+          .userSubscrption(id: widget.id);
     print('dadadadadada');
     print('${Provider.of<UserProvider>(context, listen: false).approval}');
     if (Provider.of<UserProvider>(context, listen: false).approval == '1') {
@@ -41,6 +42,7 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userPro = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -57,7 +59,9 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 new Text(
-                  'الرجاء الدفع عند اقرب منفذ كي كارد علما ان الرمز سيتم ارساله برسالة على رقم هاتفك',
+                  userPro.subscrptionId != null
+                      ? 'الرجاء الدفع عند اقرب منفذ كي كارد علما ان الرمز سيتم ارساله برسالة على رقم هاتفك'
+                      : 'dsfsdfsdf',
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.center,
                   style: TextStyle(

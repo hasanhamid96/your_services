@@ -15,21 +15,20 @@ class Subscrption extends StatefulWidget {
 }
 
 class _SubscrptionState extends State<Subscrption> {
-
-
-
-  List<Subscriptions> subscriptions=[];
+  List<Subscriptions> subscriptions = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes().then((value){
-      subscriptions=value;
+    Provider.of<UserProvider>(context, listen: false)
+        .subsecrptionsTybes()
+        .then((value) {
+      subscriptions = value;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -84,6 +83,7 @@ class _SubscrptionState extends State<Subscrption> {
                 } else {
                   await Provider.of<UserProvider>(context, listen: false)
                       .userSubscrption(id: subscrptionId);
+
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => WatingApprovelScreen(
@@ -101,8 +101,6 @@ class _SubscrptionState extends State<Subscrption> {
   }
 }
 
-
-
 class SubscrptionTybe extends StatefulWidget {
   @override
   State<SubscrptionTybe> createState() => _SubscrptionTybeState();
@@ -110,14 +108,16 @@ class SubscrptionTybe extends StatefulWidget {
 
 class _SubscrptionTybeState extends State<SubscrptionTybe> {
   int selectedIndex = -1;
-  List<Subscriptions> subscriptions=[];
+  List<Subscriptions> subscriptions = [];
 
   @override
   void initState() {
-    Provider.of<UserProvider>(context, listen: false).subsecrptionsTybes().then((value){
-    setState(() {
-      subscriptions=value;
-    });
+    Provider.of<UserProvider>(context, listen: false)
+        .subsecrptionsTybes()
+        .then((value) {
+      setState(() {
+        subscriptions = value;
+      });
     });
     super.initState();
   }
@@ -129,7 +129,7 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
       height: 420,
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
-        itemCount:subscriptions.length,
+        itemCount: subscriptions.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
@@ -140,7 +140,7 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    subscrptionId =subscriptions[index].id;
+                    subscrptionId = subscriptions[index].id;
                   });
                   print(
                       'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
@@ -158,12 +158,10 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
                       color2: selectedIndex == index
                           ? Colors.transparent
                           : Colors.blue,
-                      containerColor1: selectedIndex == index
-                          ? Colors.cyan
-                          : Colors.white,
-                      containerColor2: selectedIndex == index
-                          ? Colors.blue
-                          : Colors.white,
+                      containerColor1:
+                          selectedIndex == index ? Colors.cyan : Colors.white,
+                      containerColor2:
+                          selectedIndex == index ? Colors.blue : Colors.white,
                     ),
                   ],
                 ),

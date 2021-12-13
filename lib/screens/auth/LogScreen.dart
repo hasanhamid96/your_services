@@ -361,10 +361,12 @@ class _LogScreenState extends State<LogScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false);
     if (UserProvider.latitude != null) {
-      markers.add(Marker(
-          position: LatLng(UserProvider.latitude, UserProvider.longitude),
-          markerId: MarkerId('UserProvider.latitude'),
-          icon: BitmapDescriptor.defaultMarker));
+      markers.add(
+        Marker(
+            position: LatLng(UserProvider.latitude, UserProvider.longitude),
+            markerId: MarkerId('UserProvider.latitude'),
+            icon: BitmapDescriptor.defaultMarker),
+      );
     }
     kHintTextStyle = Theme.of(context).textTheme.headline4;
     kLabelStyle = Theme.of(context).textTheme.headline4;
@@ -378,7 +380,11 @@ class _LogScreenState extends State<LogScreen> {
           isMapSel = true;
           longe = long;
           late = lat;
-          Future.delayed(Duration(seconds: 2)).then(
+          print('$late latelatelatelatelatelatelatelate');
+
+          Future.delayed(
+            Duration(seconds: 2),
+          ).then(
             (value) {
               setState(
                 () {
@@ -1231,6 +1237,7 @@ class _LogScreenState extends State<LogScreen> {
           await ImagePicker().getImage(source: ImageSource.gallery);
       if (imagePicked == null) return;
       final imageTemporary = File(imagePicked.path);
+
       setState(() {
         this.imagePicked = imageTemporary;
       });
