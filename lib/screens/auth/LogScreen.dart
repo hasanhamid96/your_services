@@ -183,7 +183,7 @@ class _LogScreenState extends State<LogScreen> {
                           phone: phone,
                           city_id: city_id,
                           section_id: section_id,
-                          file: imagePicked,
+                          file: _image,
                           image: _image,
                           address: address,
                         )
@@ -780,7 +780,7 @@ class _LogScreenState extends State<LogScreen> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               13.0),
-                                                      child: imagePicked != null
+                                                      child: _image != null
                                                           ?
                                                           //  Container(
                                                           //     height: 50,
@@ -810,7 +810,7 @@ class _LogScreenState extends State<LogScreen> {
                                                                           100,
                                                                       child: Image
                                                                           .file(
-                                                                        imagePicked,
+                                                                        _image,
                                                                         fit: BoxFit
                                                                             .cover,
                                                                       ),
@@ -1219,12 +1219,11 @@ class _LogScreenState extends State<LogScreen> {
 
   Future pickImage() async {
     try {
-      final imagePicked =
-          await ImagePicker().getImage(source: ImageSource.camera);
-      if (imagePicked == null) return;
-      final imageTemporary = File(imagePicked.path);
+      final _image = await ImagePicker().getImage(source: ImageSource.camera);
+      if (_image == null) return;
+      final imageTemporary = File(_image.path);
       setState(() {
-        this.imagePicked = imageTemporary;
+        this._image = imageTemporary;
       });
     } on PlatformException catch (e) {
       print(e);
@@ -1233,13 +1232,12 @@ class _LogScreenState extends State<LogScreen> {
 
   Future galleryImage() async {
     try {
-      final imagePicked =
-          await ImagePicker().getImage(source: ImageSource.gallery);
-      if (imagePicked == null) return;
-      final imageTemporary = File(imagePicked.path);
+      final _image = await ImagePicker().getImage(source: ImageSource.gallery);
+      if (_image == null) return;
+      final imageTemporary = File(_image.path);
 
       setState(() {
-        this.imagePicked = imageTemporary;
+        this._image = imageTemporary;
       });
     } on PlatformException catch (e) {
       print(e);

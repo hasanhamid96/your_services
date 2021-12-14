@@ -227,6 +227,9 @@ class UserProvider with ChangeNotifier {
         print('5 $type');
         print('6 $token');
         print('7${playerId.toString()}');
+        print('8${latitude.toString()}');
+        print('9${longitude.toString()}');
+
         // isLogged = true;
         print('success');
         return 'true';
