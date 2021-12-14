@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier {
   String _loginType;
   DateTime _expire;
   String get loginType => _loginType;
-
+  int sUbsId;
   DateTime get expire => _expire;
   static Uint8List imageMemory;
   static int userId;
@@ -218,6 +218,7 @@ class UserProvider with ChangeNotifier {
         Image = extractedProfile['user']['photo'];
         _approval = extractedProfile['user']['approval'];
         type = 'provider';
+        sUbsId = extractedProfile['user']['subscription_id'];
         prefs.setString('$appName' + '_' + 'type', 'provider');
         // _expire = DateTime.parse(extractedProfile['user']['expaer'].toString());
       } else {
@@ -495,6 +496,7 @@ class UserProvider with ChangeNotifier {
     // _expire = DateTime.parse(prefs.getString('$appName' + '_' + "expire"));
     _approval = prefs.getInt('$appName' + '_' + "approval");
     _loginType = prefs.getString('$appName' + '_' + "type");
+
     notifyListeners();
   }
 

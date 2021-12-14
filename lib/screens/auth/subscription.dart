@@ -8,6 +8,7 @@ import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 
 String subscrptionId;
+bool loading = true;
 
 class Subscrption extends StatefulWidget {
   @override
@@ -24,76 +25,86 @@ class _SubscrptionState extends State<Subscrption> {
         .subsecrptionsTybes()
         .then((value) {
       subscriptions = value;
+      loading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'اختر نوع الاشتراك',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black,
-            ),
-            textDirection: ui.TextDirection.rtl,
-          ),
-          SubscrptionTybe(),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.cyan, Colors.blue]),
-                borderRadius: BorderRadius.circular(10.0)),
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.transparent),
+        body: loading == false
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'اختر نوع الاشتراك',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      textDirection: ui.TextDirection.rtl,
+                    ),
+                    SubscrptionTybe(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.cyan, Colors.blue]),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.transparent),
 
-              // style: ButtonStyle(
-              //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              //     RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //   ),
-              // ),
-              child: Text(
-                'موافق',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () async {
-                if (subscrptionId == null) {
-                  FlushDialog.flushDialog(context, 'لم يتم اكمال التسجيل',
-                      'يرجى اختبار باقة الاشتراك ');
-                } else {
-                  await Provider.of<UserProvider>(context, listen: false)
-                      .userSubscrption(id: subscrptionId);
+                        // style: ButtonStyle(
+                        //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                        //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        //     RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(10.0),
+                        //     ),
+                        //   ),
+                        // ),
+                        child: Text(
+                          'موافق',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (subscrptionId == null) {
+                            FlushDialog.flushDialog(
+                                context,
+                                'لم يتم اكمال التسجيل',
+                                'يرجى اختبار باقة الاشتراك ');
+                          } else {
+                            await Provider.of<UserProvider>(context,
+                                    listen: false)
+                                .userSubscrption(id: subscrptionId);
 
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => WatingApprovelScreen(
-                        id: subscrptionId.toString(),
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => WatingApprovelScreen(
+                                  id: subscrptionId.toString(),
+                                ),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ),
-                  );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    ));
+                  ],
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ));
   }
 }
 
@@ -122,51 +133,50 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
   Widget build(BuildContext context) {
     // var _model = Provider.of<UserProvider>(context, listen: true);
     return SizedBox(
-      height: 420,
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: subscriptions.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                    subscrptionId = subscriptions[index].id.toString();
-                  });
-                  print(
-                      'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
-                },
-                child: Column(
-                  children: [
-                    SubscrptionItem(
-                      text: '${subscriptions[index].name}' +
-                          ' ' +
-                          '${subscriptions[index].dollar}' +
-                          '\$',
-                      color1: selectedIndex == index
-                          ? Colors.transparent
-                          : Colors.cyan,
-                      color2: selectedIndex == index
-                          ? Colors.transparent
-                          : Colors.blue,
-                      containerColor1:
-                          selectedIndex == index ? Colors.cyan : Colors.white,
-                      containerColor2:
-                          selectedIndex == index ? Colors.blue : Colors.white,
-                    ),
-                  ],
+        height: 420,
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: subscriptions.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = index;
+                      subscrptionId = subscriptions[index].id.toString();
+                    });
+                    print(
+                        'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
+                  },
+                  child: Column(
+                    children: [
+                      SubscrptionItem(
+                        text: '${subscriptions[index].name}' +
+                            ' ' +
+                            '${subscriptions[index].dollar}' +
+                            '\$',
+                        color1: selectedIndex == index
+                            ? Colors.transparent
+                            : Colors.cyan,
+                        color2: selectedIndex == index
+                            ? Colors.transparent
+                            : Colors.blue,
+                        containerColor1:
+                            selectedIndex == index ? Colors.cyan : Colors.white,
+                        containerColor2:
+                            selectedIndex == index ? Colors.blue : Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ));
   }
 }
 
