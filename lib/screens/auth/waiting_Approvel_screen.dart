@@ -59,9 +59,7 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 new Text(
-                  userPro.subscrptionId != null
-                      ? 'الرجاء الدفع عند اقرب منفذ كي كارد علما ان الرمز سيتم ارساله برسالة على رقم هاتفك'
-                      : 'dsfsdfsdf',
+                  'الرجاء الدفع عند اقرب منفذ كي كارد علما ان الرمز سيتم ارساله برسالة على رقم هاتفك',
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.center,
                   style: TextStyle(

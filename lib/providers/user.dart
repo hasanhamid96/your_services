@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -13,7 +14,7 @@ class UserProvider with ChangeNotifier {
   static bool isLogin = false;
   static bool isLogged = false;
   static String userName;
-  static String hostName = 'https://urservices.creativeapps.me';
+  static String hostName = 'https://urservices.creativeapps.me/update';
   static String userPhone;
   static String userPhoto;
   static double latitude;
@@ -23,17 +24,15 @@ class UserProvider with ChangeNotifier {
   static String Image;
   static String type;
   String _loginType;
-  int _subscrptionId;
 
   String get loginType => _loginType;
-  int get subscrptionId => _subscrptionId;
-
   static Uint8List imageMemory;
   static int userId;
   static String token;
   static String address;
-  String _approval = '0';
+  static String _approval = '0';
   String get approval => _approval;
+
   double get latitudes {
     return latitude;
   }
@@ -63,7 +62,7 @@ class UserProvider with ChangeNotifier {
       playerId = prefs.getString('playerId');
     }
 
-    var url = Uri.parse("${UserProvider.hostName}/update/api/user/register");
+    var url = Uri.parse("${UserProvider.hostName}/api/user/register");
     var request = http.MultipartRequest(
       "POST",
       (url),
@@ -144,7 +143,7 @@ class UserProvider with ChangeNotifier {
       playerId = prefs.getString('playerId');
     }
 
-    var url = Uri.parse("${UserProvider.hostName}/update/api/user/register");
+    var url = Uri.parse("${UserProvider.hostName}/api/user/register");
     var request = http.MultipartRequest("POST", (url));
 
     try {
@@ -208,8 +207,6 @@ class UserProvider with ChangeNotifier {
         );
         prefs.setInt('$appName' + '_' + 'approval',
             extractedProfile['user']['approval']);
-        prefs.setInt('$appName' + '_' + 'subscription_id',
-            extractedProfile['user']['subscription_id']);
         token = extractedProfile['user']['token'];
         userName = name;
         userPhone = phone;
@@ -217,7 +214,6 @@ class UserProvider with ChangeNotifier {
         Image = extractedProfile['user']['photo'];
         _approval = extractedProfile['user']['approval'].toString();
         type = 'provider';
-        _subscrptionId = extractedProfile['user']['subscription_id'];
         prefs.setString('$appName' + '_' + 'type', 'provider');
       } else {
         return extractedProfile['msg'].toString();
@@ -230,7 +226,7 @@ class UserProvider with ChangeNotifier {
         print('4 ${approval.toString()}');
         print('5 $type');
         print('6 $token');
-        print('7 ${playerId.toString()}');
+        print('7${playerId.toString()}');
         // isLogged = true;
         print('success');
         return 'true';
@@ -238,9 +234,7 @@ class UserProvider with ChangeNotifier {
       return response.statusCode == 200 ? 'true' : 'false';
     } catch (e) {
       print('$e');
-      return Future.value(
-        e['msg'].toString(),
-      );
+      return Future.value(e['msg'].toString());
     }
   }
 
@@ -258,13 +252,12 @@ class UserProvider with ChangeNotifier {
     print(password.toString());
 
     try {
-      var respon = await http.post(
-          Uri.parse("${UserProvider.hostName}/update/api/user/login"),
-          body: {
-            "phone": phone.toString(),
-            "password": password.toString(),
-            "onesignal": playerId.toString(),
-          });
+      var respon = await http
+          .post(Uri.parse("${UserProvider.hostName}/api/user/login"), body: {
+        "phone": phone.toString(),
+        "password": password.toString(),
+        "onesignal": playerId.toString(),
+      });
       extractedProfile = json.decode(respon.body);
       print(extractedProfile);
 
@@ -321,7 +314,7 @@ class UserProvider with ChangeNotifier {
     List<Person> finalLoadedPerson = [];
     try {
       final response = await http.get(
-          Uri.parse('${UserProvider.hostName}/update/api/user/profile'),
+          Uri.parse('${UserProvider.hostName}/api/user/profile'),
           headers: {'Authorization': '$token', 'Accept': 'application/json'});
       var data4 = json.decode(response.body);
 
@@ -445,6 +438,11 @@ class UserProvider with ChangeNotifier {
     prefs.clear();
     isLogin = false;
     userName = "Guest";
+
+    //showInSnackBar("تم تسجيل الخروج", context);
+    // Languages.selectedLanguage == 0
+    //     ? pageController.jumpToTab(3)
+    //     : pageController.jumpToTab(0);
   }
 
   bool once = false;
@@ -485,7 +483,6 @@ class UserProvider with ChangeNotifier {
         print(type);
       }
     }
-    _subscrptionId = prefs.getInt('$appName' + '_' + "subscription_id");
     _approval = prefs.getString('$appName' + '_' + "approval").toString();
     _loginType = prefs.getString('$appName' + '_' + "type");
     notifyListeners();
@@ -494,14 +491,13 @@ class UserProvider with ChangeNotifier {
   Future subsecrptionsTybes() async {
     try {
       var response = await http.get(
-        Uri.parse('$hostName/update/api/subscriptions'),
+        Uri.parse('$hostName/api/subscriptions'),
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
       var myData = Subscrpion.fromJson(data);
       var subList = myData.subscriptions;
       print(': ${subList.toString()}');
-      // return subList;
 
       return subList;
     } catch (e) {
@@ -515,20 +511,15 @@ class UserProvider with ChangeNotifier {
 
     try {
       var response = await http.post(
-        Uri.parse(
-            'https://urservices.creativeapps.me/update/api/user/subscribe'),
-        body: {'subscription_id': id},
+        Uri.parse('$hostName/api/user/subscribe'),
+        body: {'subscription_id': 1},
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
-
-      prefs.setInt('$appName' + '_' + 'approval', data['user']['approval']);
-      prefs.setInt(
-          '$appName' + '_' + 'approval', data['user']['subscription_id']);
+      prefs.setString('$appName' + '_' + 'approval', data['user']['approval']);
       _approval = data['user']['approval'];
-      _subscrptionId = data['user']['subscription_id'];
       print(
-          '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${_approval}');
+          '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
     } catch (e) {
       print('e: $e');
     }
