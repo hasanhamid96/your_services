@@ -77,14 +77,6 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
-                ElevatedButton(
-                    onPressed: () async {
-                      await Provider.of<UserProvider>(context, listen: false)
-                          .signOut();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => StartScreen()));
-                    },
-                    child: Text('sign out'))
               ],
             ),
           ),

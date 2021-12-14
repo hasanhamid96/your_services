@@ -45,10 +45,6 @@ class _SubscrptionState extends State<Subscrption> {
             textDirection: ui.TextDirection.rtl,
           ),
           SubscrptionTybe(),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Text('الرجاء الدفع عند اقرب منفذ كي كارد'),
-          ),
           SizedBox(
             height: 20,
           ),

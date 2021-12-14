@@ -450,15 +450,16 @@ class _LogScreenState extends State<LogScreen> {
                               color: CupertinoColors.white,
                             ),
                             radius: 70,
-                            backgroundImage:
-                                _image == null ? null : FileImage(_image),
+                            backgroundImage: imagePicked == null
+                                ? null
+                                : FileImage(imagePicked),
                           ),
                         if (isUser)
                           CircleAvatar(
-                            backgroundColor: _image != null
+                            backgroundColor: imagePicked != null
                                 ? Colors.transparent
                                 : CupertinoColors.systemTeal,
-                            child: _image != null
+                            child: imagePicked != null
                                 ? null
                                 : Icon(
                                     !isLogin
@@ -468,8 +469,9 @@ class _LogScreenState extends State<LogScreen> {
                                     color: CupertinoColors.white,
                                   ),
                             radius: 70,
-                            backgroundImage:
-                                _image == null ? null : FileImage(_image),
+                            backgroundImage: imagePicked == null
+                                ? null
+                                : FileImage(imagePicked),
                           ),
                       ],
                     ),
@@ -759,7 +761,7 @@ class _LogScreenState extends State<LogScreen> {
                                           ),
                                           //add pdf/image/word
                                           Text(
-                                            'اضافة ثبوتية   ( صورة  او  ملف ورد او  pdf ) ',
+                                            'اضافة ثبوتية',
                                             textAlign: TextAlign.right,
                                             textDirection: ui.TextDirection.rtl,
                                           ),
@@ -819,17 +821,14 @@ class _LogScreenState extends State<LogScreen> {
                                                                 ),
                                                                 InkWell(
                                                                   onTap: () {
-                                                                    // setState(
-                                                                    //     () {
-                                                                    //   files
-                                                                    //       .clear();
-                                                                    //   files =
-                                                                    //       null;
-                                                                    // });
+                                                                    setState(
+                                                                        () {
+                                                                      _showFilPicker(
+                                                                          context);
+                                                                    });
                                                                   },
                                                                   child: Icon(
-                                                                    CupertinoIcons
-                                                                        .clear_circled_solid,
+                                                                    Icons.edit,
                                                                     color: Colors
                                                                         .red,
                                                                   ),
@@ -1244,6 +1243,35 @@ class _LogScreenState extends State<LogScreen> {
     }
   }
 
+  Future pickImageProfile() async {
+    try {
+      final imagePicked =
+          await ImagePicker().getImage(source: ImageSource.camera);
+      if (imagePicked == null) return;
+      final imageTemporary = File(imagePicked.path);
+      setState(() {
+        this.imagePicked = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  Future galleryImageProfile() async {
+    try {
+      final imagePicked =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+      if (imagePicked == null) return;
+      final imageTemporary = File(imagePicked.path);
+
+      setState(() {
+        this.imagePicked = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
   void _showPicker(context) {
     showCupertinoDialog(
       context: context,
@@ -1254,7 +1282,7 @@ class _LogScreenState extends State<LogScreen> {
             children: [
               ListTile(
                 onTap: () {
-                  pickImage();
+                  pickImageProfile();
                   return Navigator.of(context).pop();
                 },
                 leading: Icon(
@@ -1268,7 +1296,7 @@ class _LogScreenState extends State<LogScreen> {
               ),
               ListTile(
                 onTap: () {
-                  galleryImage();
+                  galleryImageProfile();
                   return Navigator.of(context).pop();
                 },
                 leading: Icon(
@@ -1359,20 +1387,20 @@ class _LogScreenState extends State<LogScreen> {
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ),
-              ListTile(
-                onTap: () {
-                  pickFile();
-                  return Navigator.of(context).pop();
-                },
-                leading: Icon(
-                  CupertinoIcons.folder,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  'pdf',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-              ),
+              // ListTile(
+              //   onTap: () {
+              //     pickFile();
+              //     return Navigator.of(context).pop();
+              //   },
+              //   leading: Icon(
+              //     CupertinoIcons.folder,
+              //     color: Colors.black,
+              //   ),
+              //   title: Text(
+              //     'pdf',
+              //     style: Theme.of(context).textTheme.headline1,
+              //   ),
+              // ),
             ],
           ),
         ),

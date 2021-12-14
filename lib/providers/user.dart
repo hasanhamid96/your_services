@@ -24,8 +24,10 @@ class UserProvider with ChangeNotifier {
   static String Image;
   static String type;
   String _loginType;
-
+  DateTime _expire;
   String get loginType => _loginType;
+
+  DateTime get expire => _expire;
   static Uint8List imageMemory;
   static int userId;
   static String token;
@@ -208,6 +210,8 @@ class UserProvider with ChangeNotifier {
         prefs.setInt('$appName' + '_' + 'approval',
             extractedProfile['user']['approval']);
         token = extractedProfile['user']['token'];
+        // prefs.setString(
+        //     '$appName' + '_' + 'expire', extractedProfile['user']['expaer']);
         userName = name;
         userPhone = phone;
         userId = extractedProfile['user']['id'];
@@ -215,6 +219,7 @@ class UserProvider with ChangeNotifier {
         _approval = extractedProfile['user']['approval'];
         type = 'provider';
         prefs.setString('$appName' + '_' + 'type', 'provider');
+        // _expire = DateTime.parse(extractedProfile['user']['expaer'].toString());
       } else {
         return extractedProfile['msg'].toString();
       }
@@ -229,6 +234,7 @@ class UserProvider with ChangeNotifier {
         print('7${playerId.toString()}');
         print('8${latitude.toString()}');
         print('9${longitude.toString()}');
+        print('10${_expire.toString()}');
 
         // isLogged = true;
         print('success');
@@ -486,6 +492,7 @@ class UserProvider with ChangeNotifier {
         print(type);
       }
     }
+    // _expire = DateTime.parse(prefs.getString('$appName' + '_' + "expire"));
     _approval = prefs.getInt('$appName' + '_' + "approval");
     _loginType = prefs.getString('$appName' + '_' + "type");
     notifyListeners();
@@ -515,16 +522,19 @@ class UserProvider with ChangeNotifier {
     try {
       var response = await http.post(
         Uri.parse('$hostName/api/user/subscribe'),
-        body: {'subscription_id': '1'},
+        body: {'subscription_id': id},
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
       prefs.reload();
       prefs.setInt('$appName' + '_' + 'approval', data['user']['approval']);
       _approval = data['user']['approval'];
+      // prefs.getString('$appName' + '_' + "expire");
+      // _expire = DateTime.parse(data['user']['expaer']);
+
       print(
           '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
-      print(_approval);
+      // print(_expire);
     } catch (e) {
       print('e: $e');
     }
