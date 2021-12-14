@@ -173,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         MaterialPageRoute(
                           builder: (context) => (UserProvider.token != null &&
                                   userPro.loginType == 'provider' &&
-                                  userPro.approval == '0')
+                                  userPro.approval == 0)
                               ? WatingApprovelScreen()
                               : UserProvider.token == null
                                   ? StartScreen()
@@ -265,7 +265,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     MaterialPageRoute(
                       builder: (context) => (UserProvider.token != null &&
                               userPro.loginType == 'provider' &&
-                              userPro.approval == '0')
+                              userPro.approval == 0)
                           ? WatingApprovelScreen()
                           : UserProvider.token == null
                               ? StartScreen()

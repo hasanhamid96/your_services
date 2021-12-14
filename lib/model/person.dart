@@ -10,7 +10,7 @@ class Person {
   String city_id;
   String section_id;
   String address;
-  String approval;
+  int approval;
   String lat;
   String long;
   String type;
@@ -28,5 +28,5 @@ class Person {
     @required this.lat,
     @required this.long,
     @required this.type,
-});
+  });
 }

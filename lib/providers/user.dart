@@ -30,8 +30,8 @@ class UserProvider with ChangeNotifier {
   static int userId;
   static String token;
   static String address;
-  static String _approval = '0';
-  String get approval => _approval;
+  static int _approval = 0;
+  int get approval => _approval;
 
   double get latitudes {
     return latitude;
@@ -212,7 +212,7 @@ class UserProvider with ChangeNotifier {
         userPhone = phone;
         userId = extractedProfile['user']['id'];
         Image = extractedProfile['user']['photo'];
-        _approval = extractedProfile['user']['approval'].toString();
+        _approval = extractedProfile['user']['approval'];
         type = 'provider';
         prefs.setString('$appName' + '_' + 'type', 'provider');
       } else {
@@ -223,7 +223,7 @@ class UserProvider with ChangeNotifier {
         print('1 $name');
         print('2 $password');
         print('3 $phone');
-        print('4 ${approval.toString()}');
+        print('4 ${approval}');
         print('5 $type');
         print('6 $token');
         print('7${playerId.toString()}');
@@ -294,7 +294,7 @@ class UserProvider with ChangeNotifier {
               extractedProfile['user']['approval']);
           Image = extractedProfile['user']['photo'];
           address = extractedProfile['user']['address'];
-          _approval = extractedProfile['user']['approval'].toString();
+          _approval = extractedProfile['user']['approval'];
         }
         notifyListeners();
         retuningData = 'login success';
@@ -332,7 +332,7 @@ class UserProvider with ChangeNotifier {
           city_id: data4['user']['city_id'].toString(),
           address: data4['user']['address'],
           section_id: data4['user']['section_id'].toString(),
-          approval: data4['user']['approval'].toString(),
+          approval: data4['user']['approval'],
           long: data4['user']['long'],
           lat: data4['user']['lat'],
           birthDay: data4['user']['birthdate'],
@@ -340,7 +340,7 @@ class UserProvider with ChangeNotifier {
           type: data4['user']['type'],
         ),
       );
-      prefs.setString('$appName' + '_' + 'approval', person.approval);
+      prefs.setInt('$appName' + '_' + 'approval', person.approval);
       _approval = person.approval;
 
       if (data4['status'] == true) {
@@ -483,7 +483,7 @@ class UserProvider with ChangeNotifier {
         print(type);
       }
     }
-    _approval = prefs.getString('$appName' + '_' + "approval").toString();
+    _approval = prefs.getInt('$appName' + '_' + "approval");
     _loginType = prefs.getString('$appName' + '_' + "type");
     notifyListeners();
   }
@@ -506,20 +506,22 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future userSubscrption({int id}) async {
+  Future userSubscrption({String id}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       var response = await http.post(
         Uri.parse('$hostName/api/user/subscribe'),
-        body: {'subscription_id': 1},
+        body: {'subscription_id': '1'},
         headers: {'Authorization': '$token', 'Accept': 'application/json'},
       );
       var data = json.decode(response.body);
-      prefs.setString('$appName' + '_' + 'approval', data['user']['approval']);
+      prefs.reload();
+      prefs.setInt('$appName' + '_' + 'approval', data['user']['approval']);
       _approval = data['user']['approval'];
       print(
           '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
+      print(_approval);
     } catch (e) {
       print('e: $e');
     }

@@ -2,10 +2,11 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/screens/bottomScreens/bottomNavBar.dart';
 
 class WatingApprovelScreen extends StatefulWidget {
-  int id;
+  String id;
   WatingApprovelScreen({@required this.id});
   @override
   State<WatingApprovelScreen> createState() => _WatingApprovelScreenState();
@@ -28,10 +29,10 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed)
       Provider.of<UserProvider>(context, listen: false)
-          .userSubscrption(id: widget.id);
+          .userSubscrption(id: '1');
     print('dadadadadada');
     print('${Provider.of<UserProvider>(context, listen: false).approval}');
-    if (Provider.of<UserProvider>(context, listen: false).approval == '1') {
+    if (Provider.of<UserProvider>(context, listen: false).approval == 1) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => BottomNavBar(),
@@ -76,6 +77,14 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
+                ElevatedButton(
+                    onPressed: () async {
+                      await Provider.of<UserProvider>(context, listen: false)
+                          .signOut();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => StartScreen()));
+                    },
+                    child: Text('sign out'))
               ],
             ),
           ),

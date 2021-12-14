@@ -7,7 +7,7 @@ import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 
-int subscrptionId;
+String subscrptionId;
 
 class Subscrption extends StatefulWidget {
   @override
@@ -87,7 +87,7 @@ class _SubscrptionState extends State<Subscrption> {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => WatingApprovelScreen(
-                        id: subscrptionId,
+                        id: subscrptionId.toString(),
                       ),
                     ),
                   );
@@ -140,7 +140,7 @@ class _SubscrptionTybeState extends State<SubscrptionTybe> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    subscrptionId = subscriptions[index].id;
+                    subscrptionId = subscriptions[index].id.toString();
                   });
                   print(
                       'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo${subscrptionId.toString()}');
