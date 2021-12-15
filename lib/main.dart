@@ -152,6 +152,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     final userPro = Provider.of<UserProvider>(context, listen: false);
+
     userPro.checkLogin();
     initializePlayer(userPro);
   }
