@@ -5,12 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/cities.dart';
 import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/person_works.dart';
 import 'package:your_services/providers/persons.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 import 'package:your_services/screens/maps/map-screen.dart';
 import 'package:your_services/screens/works/works_details.dart';
@@ -147,6 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
   ChewieController _chewieController;
   var chewieController;
   var sub;
+  var subId;
 
   @override
   void initState() {

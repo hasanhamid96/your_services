@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_services/helper/flushDialog.dart';
 import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/user.dart';
@@ -9,13 +10,14 @@ import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 
 String subscrptionId;
 bool loading = true;
+String appName = 'basmazon';
 
-class Subscrption extends StatefulWidget {
+class subscrptionsScreen extends StatefulWidget {
   @override
-  _SubscrptionState createState() => _SubscrptionState();
+  _subscrptionsScreenState createState() => _subscrptionsScreenState();
 }
 
-class _SubscrptionState extends State<Subscrption> {
+class _subscrptionsScreenState extends State<subscrptionsScreen> {
   List<Subscriptions> subscriptions = [];
   @override
   void initState() {
@@ -32,79 +34,73 @@ class _SubscrptionState extends State<Subscrption> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: loading == false
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'اختر نوع الاشتراك',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      textDirection: ui.TextDirection.rtl,
-                    ),
-                    SubscrptionTybe(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Colors.cyan, Colors.blue]),
-                          borderRadius: BorderRadius.circular(10.0)),
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.transparent),
+        body: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'اختر نوع الاشتراك',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+            textDirection: ui.TextDirection.rtl,
+          ),
+          SubscrptionTybe(),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [Colors.cyan, Colors.blue]),
+                borderRadius: BorderRadius.circular(10.0)),
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.transparent),
 
-                        // style: ButtonStyle(
-                        //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                        //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        //     RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(10.0),
-                        //     ),
-                        //   ),
-                        // ),
-                        child: Text(
-                          'موافق',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (subscrptionId == null) {
-                            FlushDialog.flushDialog(
-                                context,
-                                'لم يتم اكمال التسجيل',
-                                'يرجى اختبار باقة الاشتراك ');
-                          } else {
-                            await Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .userSubscrption(id: subscrptionId);
-
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => WatingApprovelScreen(
-                                  id: subscrptionId.toString(),
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+              // style: ButtonStyle(
+              //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //     RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //   ),
+              // ),
+              child: Text(
+                'موافق',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
                 ),
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ));
+              ),
+              onPressed: () async {
+                if (subscrptionId == null) {
+                  FlushDialog.flushDialog(context, 'لم يتم اكمال التسجيل',
+                      'يرجى اختبار باقة الاشتراك ');
+                } else {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('$appName' + '_' + 'subId', subscrptionId);
+                  await Provider.of<UserProvider>(context, listen: false)
+                      .userSubscrption(id: subscrptionId);
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => WatingApprovelScreen(
+                        id: subscrptionId.toString(),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }
 

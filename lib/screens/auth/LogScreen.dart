@@ -184,7 +184,7 @@ class _LogScreenState extends State<LogScreen> {
                           city_id: city_id,
                           section_id: section_id,
                           file: _image,
-                          image: _image,
+                          image: imagePicked,
                           address: address,
                         )
                             .then(
@@ -207,7 +207,7 @@ class _LogScreenState extends State<LogScreen> {
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => Subscrption(),
+                                  builder: (context) => subscrptionsScreen(),
                                 ),
                               );
                             } else {
@@ -1066,16 +1066,17 @@ class _LogScreenState extends State<LogScreen> {
               icon: Container(
                 padding: EdgeInsets.only(left: 10),
                 child: Padding(
-                    padding: const EdgeInsets.only(right: .0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: isLoadingCities
-                          ? CupertinoActivityIndicator()
-                          : Icon(
-                              Icons.category,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                    )),
+                  padding: const EdgeInsets.only(right: .0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: isLoadingCities
+                        ? CupertinoActivityIndicator()
+                        : Icon(
+                            Icons.category,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                  ),
+                ),
               ),
             ),
             value: selectedCat,
@@ -1218,20 +1219,30 @@ class _LogScreenState extends State<LogScreen> {
 
   Future pickImage() async {
     try {
-      final _image = await ImagePicker().getImage(source: ImageSource.camera);
+      final _image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 100,
+        maxHeight: 100,
+        maxWidth: 100,
+      );
       if (_image == null) return;
       final imageTemporary = File(_image.path);
       setState(() {
         this._image = imageTemporary;
       });
     } on PlatformException catch (e) {
-      print(e);
+      print('pickImage error $e');
     }
   }
 
   Future galleryImage() async {
     try {
-      final _image = await ImagePicker().getImage(source: ImageSource.gallery);
+      final _image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+        maxHeight: 100,
+        maxWidth: 100,
+      );
       if (_image == null) return;
       final imageTemporary = File(_image.path);
 
@@ -1239,14 +1250,18 @@ class _LogScreenState extends State<LogScreen> {
         this._image = imageTemporary;
       });
     } on PlatformException catch (e) {
-      print(e);
+      print('galleryImage error $e');
     }
   }
 
   Future pickImageProfile() async {
     try {
-      final imagePicked =
-          await ImagePicker().getImage(source: ImageSource.camera);
+      final imagePicked = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 100,
+        maxHeight: 100,
+        maxWidth: 100,
+      );
       if (imagePicked == null) return;
       final imageTemporary = File(imagePicked.path);
       setState(() {
@@ -1259,8 +1274,12 @@ class _LogScreenState extends State<LogScreen> {
 
   Future galleryImageProfile() async {
     try {
-      final imagePicked =
-          await ImagePicker().getImage(source: ImageSource.gallery);
+      final imagePicked = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+        maxHeight: 100,
+        maxWidth: 100,
+      );
       if (imagePicked == null) return;
       final imageTemporary = File(imagePicked.path);
 

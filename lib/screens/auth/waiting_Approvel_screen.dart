@@ -1,8 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/startScreen.dart';
+import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/screens/bottomScreens/bottomNavBar.dart';
 
 class WatingApprovelScreen extends StatefulWidget {
@@ -14,8 +16,16 @@ class WatingApprovelScreen extends StatefulWidget {
 
 class _WatingApprovelScreenState extends State<WatingApprovelScreen>
     with WidgetsBindingObserver {
+  Future checkApproval() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var subId = prefs.getString('$appName' + '_' + "subId");
+    final userPro = Provider.of<UserProvider>(context, listen: false);
+    userPro.userSubscrption(id: subId);
+  }
+
   void initState() {
     super.initState();
+    checkApproval();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -26,16 +36,21 @@ class _WatingApprovelScreenState extends State<WatingApprovelScreen>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed)
-      Provider.of<UserProvider>(context, listen: false)
-          .userSubscrption(id: '1');
-    print('dadadadadada');
-    print('${Provider.of<UserProvider>(context, listen: false).approval}');
-    if (Provider.of<UserProvider>(context, listen: false).approval == 1) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var subId = prefs.getString('$appName' + '_' + "subId");
+    final userPro = Provider.of<UserProvider>(context, listen: false);
+
+    if (state == AppLifecycleState.resumed && userPro.approval == 1) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => BottomNavBar(),
+        ),
+      );
+    } else if (subId == null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => StartScreen(),
         ),
       );
     }

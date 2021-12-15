@@ -24,11 +24,14 @@ class SectionItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () {
             // Provider.of<Sections>(context,listen: false).fetchSections()
-            Navigator.of(context).push(CupertinoPageRoute(
+            Navigator.of(context).push(
+              CupertinoPageRoute(
                 builder: (context) => PersonList(
-                      city_id: city_id,
-                      section_id: section.id,
-                    )));
+                  city_id: city_id,
+                  section_id: section.id,
+                ),
+              ),
+            );
           },
           child: Container(
             height: MediaQuery.of(context).size.height * 0.25,

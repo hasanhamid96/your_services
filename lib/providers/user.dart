@@ -173,6 +173,7 @@ class UserProvider with ChangeNotifier {
         request.files.add(pic);
       }
       if (file != null) {
+        print(file.path);
         var fily = await http.MultipartFile.fromPath("identifier", file.path);
         //add multipart to request
         // request.files.addAll([pic]);
@@ -225,7 +226,7 @@ class UserProvider with ChangeNotifier {
         return extractedProfile['msg'].toString();
       }
       if (response.statusCode == 200) {
-        print('1 $image');
+        print('1 $file');
         print('1 $name');
         print('2 $password');
         print('3 $phone');
