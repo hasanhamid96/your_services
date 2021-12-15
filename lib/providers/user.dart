@@ -14,7 +14,7 @@ class UserProvider with ChangeNotifier {
   static bool isLogin = false;
   static bool isLogged = false;
   static String userName;
-  static String hostName = 'https://urservices.creativeapps.me/update';
+  static String hostName = 'https://urservices.creativeapps.me';
   static String userPhone;
   static String userPhoto;
   static double latitude;
