@@ -81,20 +81,11 @@ class _SearchScreenState extends State<SearchScreen> {
           physics: BouncingScrollPhysics(),
           controller: scorllController,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                CupertinoSliverNavigationBar(
-                  key: key2,
-                  transitionBetweenRoutes: true,
-                  previousPageTitle: 'الرئيسية',
-                  stretch: false,
-                  border: Border.all(color: Colors.transparent),
-                  largeTitle: Text('Search'),
-                  backgroundColor: Colors.transparent,
-                ),
-              ],
-          body: isLoading
-              ? CupertinoActivityIndicator()
-              : Scaffold(
-                  appBar: PreferredSize(
+                SliverAppBar(
+                  floating: true,
+                  backgroundColor: Color.fromRGBO(235, 235, 241,1),
+                  title: Text('Search'),
+                  bottom: PreferredSize(
                       key: key,
                       child: Container(
                         height: 60,
@@ -112,15 +103,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding: const EdgeInsets.only(
                                   bottom: 8, right: 18, left: 18, top: 10),
                               child: CupertinoSearchTextField(
-                                // onChanged: (value) {
-                                //   setState(() {
-                                //     searchString=value.toLowerCase();
-                                //     Provider.of<Persons>(context, listen: false).clearFilter();
-                                //     _pagingController.addPageRequestListener((pageKey) {
-                                //       _fetchCrafts(pageKey,searchString,false).then((value){
-                                //       });
-                                //     });
-                                //   });},
                                 onSubmitted: (value) async {
                                   setState(() {
                                     isLoading = true;
@@ -130,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   Provider.of<Persons>(context, listen: false)
                                       .clearAppointItems();
                                   await Provider.of<Persons>(context,
-                                          listen: false)
+                                      listen: false)
                                       .searchPersonList(
                                     search: value,
                                   )
@@ -204,14 +186,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                               Navigator.of(context).pop();
                                               print('first filtering...');
                                               Provider.of<Persons>(context,
-                                                      listen: false)
+                                                  listen: false)
                                                   .clearSearch();
                                               await Provider.of<Persons>(
-                                                      context,
-                                                      listen: false)
+                                                  context,
+                                                  listen: false)
                                                   .filterPersonList(
-                                                      city_id: city_id,
-                                                      section_id: sec_id)
+                                                  city_id: city_id,
+                                                  section_id: sec_id)
                                                   .then((value) {
                                                 setState(() {
                                                   print(value);
@@ -229,6 +211,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   );
                                 },
                                 child: Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  color:Colors.white54,
                                   elevation: 0,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -245,75 +229,79 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                       preferredSize: Size.fromHeight(50)),
-                  body: SingleChildScrollView(
+                ),
+
+              ],
+          body: isLoading
+              ? CupertinoActivityIndicator()
+              : SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Consumer<Persons>(
+              builder: (context, sec, child) {
+                if (sec.loadedSections.length == 0 && isSearched)
+                  return Column(
+                    children: [
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: sec.personItems.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) =>
+                            CraftPersonItem(
+                                person: sec.personItems[index]),
+                      ),
+                      if (isLoadingMore)
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 70.0),
+                          margin: const EdgeInsets.only(bottom: 70.0),
+                          child: Center(
+                              child:
+                              CircularProgressIndicator.adaptive()),
+                        ),
+                      if (sec.isNoMore)
+                        Center(
+                            child: Text('ليس هنالك مزيد',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1)),
+                      SizedBox(
+                        height: 70,
+                      )
+                    ],
+                  );
+                else if (sec.loadedSections.length != 0)
+                  return ListView.builder(
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    child: Consumer<Persons>(
-                      builder: (context, sec, child) {
-                        if (sec.loadedSections.length == 0 && isSearched)
-                          return Column(
-                            children: [
-                              ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: sec.personItems.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    CraftPersonItem(
-                                        person: sec.personItems[index]),
-                              ),
-                              if (isLoadingMore)
-                                Container(
-                                  padding: const EdgeInsets.only(bottom: 70.0),
-                                  margin: const EdgeInsets.only(bottom: 70.0),
-                                  child: Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive()),
-                                ),
-                              if (sec.isNoMore)
-                                Center(
-                                    child: Text('ليس هنالك مزيد',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1)),
-                              SizedBox(
-                                height: 70,
-                              )
-                            ],
-                          );
-                        else if (sec.loadedSections.length != 0)
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: sec.loadedSections.length,
-                            itemBuilder: (context, index) => SectionItem(
-                                section: sec.loadedSections[index],
-                                city_id: city_id),
-                          );
-                        return Center(
-                          child: Material(
-                              color: Colors.transparent,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.person_search,
-                                    color: Colors.black12,
-                                    size: 70,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 13.0),
-                                    child: Text('أبحث الأن',
-                                        style: TextStyle(
-                                            color:
-                                                CupertinoColors.activeOrange)),
-                                  ),
-                                ],
-                              )),
-                        );
-                      },
-                    ),
-                  ),
-                )),
+                    itemCount: sec.loadedSections.length,
+                    itemBuilder: (context, index) => SectionItem(
+                        section: sec.loadedSections[index],
+                        city_id: city_id),
+                  );
+                return Center(
+                  child: Material(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person_search,
+                            color: Colors.black12,
+                            size: 70,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 13.0),
+                            child: Text('أبحث الأن',
+                                style: TextStyle(
+                                    color:
+                                    CupertinoColors.activeOrange)),
+                          ),
+                        ],
+                      )),
+                );
+              },
+            ),
+          ),),
     );
   }
 

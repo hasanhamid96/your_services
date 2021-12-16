@@ -34,7 +34,6 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   @override
   Widget build(BuildContext context) {
-    print(UserProvider.token);
     return Scaffold(
       body: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(

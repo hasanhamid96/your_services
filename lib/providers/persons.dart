@@ -110,7 +110,7 @@ class Persons with ChangeNotifier {
   Future<List<Person>> searchPersonList({
     String search,
   }) async {
-    print(search);
+
     if (prevUrl != nextUrl) {
       if (nextUrl == null) {
         url = '${UserProvider.hostName}/api/search?lang=ar&search=$search';
@@ -120,21 +120,19 @@ class Persons with ChangeNotifier {
       }
       print('start searching...');
 
-      print(url);
-
       try {
         final response = await http.get(Uri.parse(url), headers: {
           'Accept': 'application/json',
           'Authorization': '${UserProvider.token}'
         });
         var data4 = json.decode(response.body);
-        print(data4);
+
 
         if (data4['status'] == false) {
           return null;
         }
         final List<Section> loadedCities = [];
-        //print(data4);
+
 
         data4['Users']['data'].forEach((users) {
           loadedPerson.add(
@@ -179,16 +177,14 @@ class Persons with ChangeNotifier {
         'Authorization': '${UserProvider.token}'
       });
       var data4 = json.decode(response.body);
-      print(data4);
+
 
       if (data4['status'] == false) {
         return null;
       }
       bool isSections = false;
       final List<Section> loadedCities = [];
-      print(
-          '$data4 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
-      if (city_id != null && section_id == null) {
+          if (city_id != null && section_id == null) {
         isSections = true;
         data4['Section'].forEach((city) {
           loadedCities.add(

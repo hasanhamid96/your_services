@@ -380,7 +380,7 @@ class _LogScreenState extends State<LogScreen> {
           isMapSel = true;
           longe = long;
           late = lat;
-          print('$late latelatelatelatelatelatelatelate');
+
 
           Future.delayed(
             Duration(seconds: 2),
@@ -966,7 +966,7 @@ class _LogScreenState extends State<LogScreen> {
     var order = await getDate();
     setState(() {
       _currentDate = order;
-      print(_currentDate.weekday);
+
     });
   }
 
@@ -1185,7 +1185,7 @@ class _LogScreenState extends State<LogScreen> {
                 setState(() {
                   selectedCity = value;
                   city_id = selectedCity.id;
-                  print(city_id);
+
                 });
               },
             ),

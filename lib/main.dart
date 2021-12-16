@@ -112,14 +112,6 @@ class MyApp extends StatelessWidget {
             StartScreen.routeName: (ctx) => StartScreen(),
           },
           onGenerateRoute: (RouteSettings settings) {
-            // print('${settings.name} wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
-            // switch (settings.name) {
-            //
-            //   case 'ssss':
-            //     return MaterialWithModalsPageRoute(
-            //         builder: (_) => AddPersonWorks(),
-            //         settings: settings);
-            // }
             return MaterialWithModalsPageRoute(
                 builder: (context) => BottomNavBar(), settings: settings);
           },

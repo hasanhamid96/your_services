@@ -34,10 +34,7 @@ class PersonWorks extends ChangeNotifier {
     String description,
     isEdting: false,
   }) async {
-    print(description);
-    print(file);
-    print(work_id);
-    print(title);
+
     var url;
     if (!isEdting)
       url = '${UserProvider.hostName}/api/user/achievement';
@@ -79,9 +76,6 @@ class PersonWorks extends ChangeNotifier {
       var responseData = await response.stream.toBytes();
       var responseString = String.fromCharCodes(responseData);
 
-      print(responseString);
-      print(responseData);
-
       if (response.statusCode == 200)
         return Future.value(true);
       else
@@ -99,7 +93,7 @@ class PersonWorks extends ChangeNotifier {
       url = '${UserProvider.hostName}/api/user/achievement';
     else
       url = '${UserProvider.hostName}/api/user/achievement?id=$Id';
-    print(url);
+
     final List<PersonWork> loadedWorks = [];
     _items = [];
     try {
@@ -117,7 +111,7 @@ class PersonWorks extends ChangeNotifier {
           'Authorization': '${UserProvider.token}'
         });
       var extractWorkData = json.decode(response.body);
-      print('$extractWorkData extractWorkDataextractWorkData');
+
       var data = extractWorkData['achievement']['data'];
       data.forEach((item) {
         loadedWorks.add(PersonWork(
