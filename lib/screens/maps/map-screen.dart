@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 import 'package:your_services/providers/user.dart';
 
 class MapScreen extends StatefulWidget {
-   Function getLat;
-  MapScreen({this.getLat,});
-  static var routeName='MapScreen';
+  Function getLat;
+  MapScreen({
+    this.getLat,
+  });
+  static var routeName = 'MapScreen';
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -24,8 +26,10 @@ class _MapScreenState extends State<MapScreen> {
   static Marker thisMarker;
   static bool isMapSelected = false;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  GoogleMapController mapController;
-  void _add(LatLng position,) {
+  Completer<GoogleMapController> mapController = Completer();
+  void _add(
+    LatLng position,
+  ) {
     isMapSelected = true;
     final String markerIdVal = '0';
     final MarkerId markerId = MarkerId(markerIdVal);
@@ -48,42 +52,39 @@ class _MapScreenState extends State<MapScreen> {
 
     setState(() {
       // allpro.changeMapSelectedStatus(true);
-        thisMarker = marker;
+      thisMarker = marker;
       markers[markerId] = marker;
     });
   }
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         actions: [
           InkWell(
             onTap: () {
               setState(() {
-                if(myLocation==null){
+                if (myLocation == null) {
                   // widget.getLat(
                   //     thisMarker.position.latitude,
                   //     thisMarker.position.longitude
                   // );
-                  UserProvider.latitude=thisMarker.position.latitude;
-                  UserProvider.longitude=thisMarker.position.longitude;
-                }
-                else {
+                  UserProvider.latitude = thisMarker.position.latitude;
+                  UserProvider.longitude = thisMarker.position.longitude;
+                } else {
                   // widget.getLat(
                   //     myLocation.latitude,
                   //     myLocation.longitude
                   // );
-                  UserProvider.latitude=myLocation.latitude;
-                  UserProvider.longitude=myLocation.longitude;
+                  UserProvider.latitude = myLocation.latitude;
+                  UserProvider.longitude = myLocation.longitude;
                 }
               });
               // setState(() {
@@ -97,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
             child: Container(
               margin: EdgeInsets.all(10),
               child: Text(
-               "تم" ,
+                "تم",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
@@ -112,7 +113,9 @@ class _MapScreenState extends State<MapScreen> {
             overflow: Overflow.visible,
             children: [
               GoogleMap(
-                // onMapCreated: _onMapCreated,
+                onMapCreated: (GoogleMapController controller) {
+                  mapController.complete(controller);
+                },
                 // liteModeEnabled: true,
                 mapToolbarEnabled: false,
                 myLocationEnabled: false,
@@ -125,30 +128,40 @@ class _MapScreenState extends State<MapScreen> {
                 ),
                 markers: Set<Marker>.of(markers.values),
                 onTap: (post) {
-                  _add(post, );
+                  _add(
+                    post,
+                  );
                 },
               ),
               Container(
                 margin: EdgeInsets.only(bottom: 80),
                 alignment: Alignment.bottomCenter,
                 child: InkWell(
-                  onTap: () async {
-                    await _determinePosition().catchError((__) {
+                  onTap: () {
+                    _determinePosition().catchError((__) {
                       print("NO Location taken");
-                    }).then((e) {
+                    }).then((e) async {
                       if (e != null) {
-                        myLocation = LatLng(
-                          e.latitude,
-                          e.longitude,
-                        );
-                        mapController
-                            .animateCamera(
+                        print('eeeeeeeeee $e');
+                        setState(() {
+                          myLocation = LatLng(
+                            e.latitude,
+                            e.longitude,
+                          );
+                        });
+                        final GoogleMapController Controller =
+                            await mapController.future;
+
+                        // print(e.latitude);
+                        // print(e.longitude);
+                        Controller.animateCamera(
                           CameraUpdate.newCameraPosition(
                             CameraPosition(target: myLocation, zoom: 13),
                           ),
-                        )
-                            .then((value) {
-                          _add(myLocation, );
+                        ).then((value) {
+                          _add(
+                            myLocation,
+                          );
                         });
                       }
                     });
@@ -180,6 +193,7 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -215,6 +229,6 @@ class _MapScreenState extends State<MapScreen> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.best);
   }
 }
