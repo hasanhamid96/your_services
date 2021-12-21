@@ -381,7 +381,6 @@ class _LogScreenState extends State<LogScreen> {
           longe = long;
           late = lat;
 
-
           Future.delayed(
             Duration(seconds: 2),
           ).then(
@@ -966,7 +965,6 @@ class _LogScreenState extends State<LogScreen> {
     var order = await getDate();
     setState(() {
       _currentDate = order;
-
     });
   }
 
@@ -1185,7 +1183,6 @@ class _LogScreenState extends State<LogScreen> {
                 setState(() {
                   selectedCity = value;
                   city_id = selectedCity.id;
-
                 });
               },
             ),
@@ -1276,9 +1273,9 @@ class _LogScreenState extends State<LogScreen> {
     try {
       final imagePicked = await ImagePicker().pickImage(
         source: ImageSource.gallery,
-        imageQuality: 100,
-        maxHeight: 100,
-        maxWidth: 100,
+        // imageQuality: 100,
+        // maxHeight: 100,
+        // maxWidth: 100,
       );
       if (imagePicked == null) return;
       final imageTemporary = File(imagePicked.path);

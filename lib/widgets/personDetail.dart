@@ -20,26 +20,26 @@ class PersonDetail extends StatefulWidget {
 }
 
 class _PersonDetailState extends State<PersonDetail> {
-
-  bool isLoading=false;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
     setState(() {
-      isLoading=true;
+      isLoading = true;
       print(widget.person.id);
     });
-    Provider.of<PersonWorks>(context,listen: false).getAllDoctorWorks(
+    Provider.of<PersonWorks>(context, listen: false)
+        .getAllDoctorWorks(
       Id: widget.person.id,
       isFromList: true,
-    ).then((value) {
-      if(mounted)
+    )
+        .then((value) {
+      if (mounted)
         setState(() {
           isLoading = false;
         });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,9 @@ class _PersonDetailState extends State<PersonDetail> {
           color: Colors.transparent,
           child: Column(
             children: [
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
               Container(
                 height: 350,
                 child: Stack(
@@ -67,6 +69,14 @@ class _PersonDetailState extends State<PersonDetail> {
                       width: double.infinity,
                       child: Image.network(
                         widget.person.image,
+                        errorBuilder: (context, error, stackTrace) =>
+                            loadingImage(mediaQuery, 1),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return loadingImage(mediaQuery, 0);
+                        },
+                        width: mediaQuery.width * 0.35,
+                        height: mediaQuery.height * 0.17,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -75,13 +85,17 @@ class _PersonDetailState extends State<PersonDetail> {
                       child: RaisedButton(
                         elevation: 0.5,
                         color: Colors.red,
-                        child: Text(widget.person.name,style: TextStyle( fontFamily: 'Cairo-Regular',fontSize: 15,color: Colors.white  ),),
+                        child: Text(
+                          widget.person.name,
+                          style: TextStyle(
+                              fontFamily: 'Cairo-Regular',
+                              fontSize: 15,
+                              color: Colors.white),
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ],
@@ -116,7 +130,8 @@ class _PersonDetailState extends State<PersonDetail> {
                     const SizedBox(height: 10.0),
                     TextFormField(
                       readOnly: true,
-                      initialValue: widget.person.phone, style: Theme.of(context).textTheme.headline1,
+                      initialValue: widget.person.phone,
+                      style: Theme.of(context).textTheme.headline1,
                       decoration: InputDecoration(labelText: 'الرقم'),
                     ),
                     const SizedBox(height: 10.0),
@@ -125,87 +140,100 @@ class _PersonDetailState extends State<PersonDetail> {
                       style: Theme.of(context).textTheme.headline1,
                     ),
                     const SizedBox(height: 5.0),
-                    isLoading?
-                    Container(
-                      width:double.infinity ,
-                      height: 130,
-                      color: Colors.grey[200],
-                      child: Center(child: CupertinoActivityIndicator(),),
-                    ):
-                    Consumer<PersonWorks>(
-                        builder: (context, doctorWorks, child) =>
-                        doctorWorks.items.length ==0
-                            ? Center(
-                                child: Text(
-                                  'لا يوجد اعمال',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1,
-                                ),
-                              )
-                            : Container(
-                             height: mediaQuery.height * 0.27,
-                              width: double.infinity,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  // gridDelegate:
-                                  //     SliverGridDelegateWithFixedCrossAxisCount(
-                                  //   crossAxisCount: 3,
-                                  //
-                                  // ),
-                                  itemCount: doctorWorks.items.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context)
-                                              .pushNamed(
-                                              DoctorWorksDetails
-                                                  .routeName,
-                                              arguments:
-                                              doctorWorks
-                                                  .items[
-                                              index]);
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Image.network(
-                                              '${doctorWorks.items[index].imageUrl}',
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) =>
-                                                      loadingImage(mediaQuery, 1),
-                                              loadingBuilder: (context, child,
-                                                  loadingProgress) {
-                                                if (loadingProgress == null)
-                                                  return child;
-                                                return loadingImage(mediaQuery, 0);
-                                              },
-                                              width: mediaQuery.width * 0.35,
-                                              height: mediaQuery.height * 0.17,
-                                            ),
-                                            ChoiceChip(
-                                              label: Text(
-                                                  "${doctorWorks.items[index].title}",style:TextStyle(color: Colors.black, fontFamily: 'Cairo-Regular',  )),
-                                              onSelected: (val) {},
-                                              selected: true,
-                                            ),
-                                          ],
+                    isLoading
+                        ? Container(
+                            width: double.infinity,
+                            height: 130,
+                            color: Colors.grey[200],
+                            child: Center(
+                              child: CupertinoActivityIndicator(),
+                            ),
+                          )
+                        : Consumer<PersonWorks>(
+                            builder: (context, doctorWorks, child) =>
+                                doctorWorks.items.length == 0
+                                    ? Center(
+                                        child: Text(
+                                          'لا يوجد اعمال',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                            )
-                        // ListView.builder(
-                        //         scrollDirection: Axis.horizontal,
-                        //         itemCount: doctorWorks.items.length,
-                        //         itemBuilder: (context, index) =>
+                                      )
+                                    : Container(
+                                        height: mediaQuery.height * 0.27,
+                                        width: double.infinity,
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          // gridDelegate:
+                                          //     SliverGridDelegateWithFixedCrossAxisCount(
+                                          //   crossAxisCount: 3,
+                                          //
+                                          // ),
+                                          itemCount: doctorWorks.items.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context)
+                                                      .pushNamed(
+                                                          DoctorWorksDetails
+                                                              .routeName,
+                                                          arguments: doctorWorks
+                                                              .items[index]);
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                      '${doctorWorks.items[index].imageUrl}',
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          loadingImage(
+                                                              mediaQuery, 1),
+                                                      loadingBuilder: (context,
+                                                          child,
+                                                          loadingProgress) {
+                                                        if (loadingProgress ==
+                                                            null) return child;
+                                                        return loadingImage(
+                                                            mediaQuery, 0);
+                                                      },
+                                                      width: mediaQuery.width *
+                                                          0.35,
+                                                      height:
+                                                          mediaQuery.height *
+                                                              0.17,
+                                                    ),
+                                                    ChoiceChip(
+                                                      label: Text(
+                                                          "${doctorWorks.items[index].title}",
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                'Cairo-Regular',
+                                                          )),
+                                                      onSelected: (val) {},
+                                                      selected: true,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                            // ListView.builder(
+                            //         scrollDirection: Axis.horizontal,
+                            //         itemCount: doctorWorks.items.length,
+                            //         itemBuilder: (context, index) =>
 
-                        //       ),
-                        ),
+                            //       ),
+                            ),
                     // Wrap(
                     //   spacing: 10.0,
                     //   runSpacing: 10.0,
@@ -256,9 +284,8 @@ class _PersonDetailState extends State<PersonDetail> {
                         ],
                       ),
                       color: CupertinoColors.systemGreen,
-                      onPressed: () async{
-                        await launch(
-                            "tel://${widget.person.phone}");
+                      onPressed: () async {
+                        await launch("tel://${widget.person.phone}");
                       },
                       textColor: Colors.white,
                       padding: const EdgeInsets.all(8.0),
@@ -267,43 +294,40 @@ class _PersonDetailState extends State<PersonDetail> {
                       ),
                     ),
                     const SizedBox(height: 20.0),
-                    if( widget.person.lat!=null&& widget.person.long!=null)
-                    MaterialButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "اظهار موقع على الخريطة",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Cairo-Regular',
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(CupertinoIcons.location)
-                        ],
+                    if (widget.person.lat != null && widget.person.long != null)
+                      MaterialButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "اظهار موقع على الخريطة",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Cairo-Regular',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(CupertinoIcons.location)
+                          ],
+                        ),
+                        color: CupertinoColors.systemTeal,
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DoctorMapLoc(
+                                double.parse(widget.person.lat),
+                                double.parse(widget.person.long),
+                                widget.person.name,
+                                widget.person.phone),
+                          ));
+                        },
+                        textColor: Colors.white,
+                        padding: const EdgeInsets.all(7.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
                       ),
-                      color: CupertinoColors.systemTeal,
-                      onPressed: () async{
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(
-                          builder: (context) => DoctorMapLoc(
-                              double.parse(
-                                 widget.person.lat),
-                              double.parse(
-                                  widget.person.long),
-                              widget.person.name,
-                              widget.person.phone),
-                        ));
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(7.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -322,6 +346,6 @@ class _PersonDetailState extends State<PersonDetail> {
         child: typeOfLoading == 0
             ? Center(
                 child: CircularProgressIndicator.adaptive(strokeWidth: 1.1))
-            : Icon(Icons.broken_image_rounded));
+            : Image.asset('assets/images/sssssss.png'));
   }
 }

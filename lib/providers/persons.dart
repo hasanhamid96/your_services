@@ -49,6 +49,7 @@ class Persons with ChangeNotifier {
         notifyListeners();
       }
       _personItems = loadedPerson;
+      print('imageimage ${_personItems[0].image}');
     } catch (e) {
       print('$e fetchDataCity');
     }
@@ -110,7 +111,6 @@ class Persons with ChangeNotifier {
   Future<List<Person>> searchPersonList({
     String search,
   }) async {
-
     if (prevUrl != nextUrl) {
       if (nextUrl == null) {
         url = '${UserProvider.hostName}/api/search?lang=ar&search=$search';
@@ -127,12 +127,10 @@ class Persons with ChangeNotifier {
         });
         var data4 = json.decode(response.body);
 
-
         if (data4['status'] == false) {
           return null;
         }
         final List<Section> loadedCities = [];
-
 
         data4['Users']['data'].forEach((users) {
           loadedPerson.add(
@@ -178,13 +176,12 @@ class Persons with ChangeNotifier {
       });
       var data4 = json.decode(response.body);
 
-
       if (data4['status'] == false) {
         return null;
       }
       bool isSections = false;
       final List<Section> loadedCities = [];
-          if (city_id != null && section_id == null) {
+      if (city_id != null && section_id == null) {
         isSections = true;
         data4['Section'].forEach((city) {
           loadedCities.add(

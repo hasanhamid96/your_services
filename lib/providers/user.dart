@@ -50,11 +50,15 @@ class UserProvider with ChangeNotifier {
     String genderr,
     String birthday,
   }) async {
-
+    print('1 $name');
+    print('2 $password');
+    print('3 $phone');
 
     final prefs = await SharedPreferences.getInstance();
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
+    print(
+        'playerIddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd $playerId');
 
     if (playerId == null) {
       playerId = prefs.getString('playerId');
@@ -67,7 +71,7 @@ class UserProvider with ChangeNotifier {
     );
 
     try {
-
+      print("how are you mr");
       request.headers.addAll({
         'Content-type': 'application/json',
         'Authorization': 'bearer',
@@ -85,7 +89,9 @@ class UserProvider with ChangeNotifier {
 
       http.Response response =
           await http.Response.fromStream(await request.send());
-
+      print(
+          '${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+      print("Result: ${response.statusCode}");
       var extractedProfile = jsonDecode(response.body);
       if (extractedProfile['status'].toString() == 'true') {
         prefs.setInt('$appName' + '_' + 'id', extractedProfile['user']['id']);
@@ -143,7 +149,7 @@ class UserProvider with ChangeNotifier {
     var request = http.MultipartRequest("POST", (url));
 
     try {
-
+      print("how are you mr");
       request.headers.addAll({
         'Content-type': 'application/json',
         'Authorization': 'bearer',
@@ -162,16 +168,24 @@ class UserProvider with ChangeNotifier {
       request.fields["section_id"] = section_id.toString();
       if (image != null) {
         var pic = await http.MultipartFile.fromPath("photo", image.path);
+        //add multipart to request
+        // request.files.addAll([pic]);
         request.files.add(pic);
       }
       if (file != null) {
+        print(file.path);
         var fily = await http.MultipartFile.fromPath("identifier", file.path);
+        //add multipart to request
+        // request.files.addAll([pic]);
         request.files.add(fily);
       }
 
-
+      //Get the response from the server
       http.Response response =
           await http.Response.fromStream(await request.send());
+      print(
+          '${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+      print("Result: ${response.statusCode}");
       var extractedProfile = jsonDecode(response.body);
 
       if (extractedProfile['status'].toString() == 'true') {
@@ -212,7 +226,19 @@ class UserProvider with ChangeNotifier {
         return extractedProfile['msg'].toString();
       }
       if (response.statusCode == 200) {
+        print('1 $file');
+        print('1 $name');
+        print('2 $password');
+        print('3 $phone');
+        print('4 ${approval}');
+        print('5 $type');
+        print('6 $token');
+        print('7${playerId.toString()}');
+        print('8${latitude.toString()}');
+        print('9${longitude.toString()}');
+        print('10${_expire.toString()}');
 
+        // isLogged = true;
         print('success');
         return 'true';
       }
@@ -233,7 +259,8 @@ class UserProvider with ChangeNotifier {
     var playerId = status.subscriptionStatus.userId;
     var retuningData;
 
-
+    print(phone.toString());
+    print(password.toString());
 
     try {
       var respon = await http
@@ -243,7 +270,7 @@ class UserProvider with ChangeNotifier {
         "onesignal": playerId.toString(),
       });
       extractedProfile = json.decode(respon.body);
-
+      print(extractedProfile);
 
       if (extractedProfile['status'] == false) {
         isLogin = false;
@@ -286,7 +313,7 @@ class UserProvider with ChangeNotifier {
       }
       return retuningData;
     } catch (e) {
-
+      print('$e   eeeeeeeeeeeeeeeeee');
       return e['msg'];
     }
   }
@@ -305,7 +332,7 @@ class UserProvider with ChangeNotifier {
       if (data4['status'] == false) {
         return null;
       }
-
+      print(data4);
 
       loadedPerson.add(
         person = Person(
@@ -349,7 +376,12 @@ class UserProvider with ChangeNotifier {
     String birthDay,
     String gender,
   }) async {
-
+    print('1 $file');
+    print('1 $name');
+    print('3 $phone');
+    print('3 ${birthDay}');
+    print('3 ${birthDay}');
+    print('3 $id');
     var status = await OneSignal.shared.getPermissionSubscriptionState();
     var playerId = status.subscriptionStatus.userId;
     var url = Uri.parse("${UserProvider.hostName}/api/user/edit/$id");
@@ -381,7 +413,8 @@ class UserProvider with ChangeNotifier {
     }
     http.Response response =
         await http.Response.fromStream(await request.send());
-
+    print('${jsonDecode(response.body)} dddddddddddddddddddddddddddddddddddd');
+    print("Result: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       print('success');
@@ -417,7 +450,10 @@ class UserProvider with ChangeNotifier {
     isLogin = false;
     userName = "Guest";
 
-  
+    //showInSnackBar("تم تسجيل الخروج", context);
+    // Languages.selectedLanguage == 0
+    //     ? pageController.jumpToTab(3)
+    //     : pageController.jumpToTab(0);
   }
 
   bool once = false;
@@ -430,7 +466,7 @@ class UserProvider with ChangeNotifier {
       if (prefs.containsKey('$appName' + '_' + 'token')) {
         if (prefs.getString('$appName' + '_' + "type").toString() ==
             'provider') {
-
+          print("provider");
           isLogin = true;
           userName = prefs.getString('$appName' + '_' + "name");
           Image = prefs.getString('$appName' + '_' + "photo");
@@ -446,7 +482,7 @@ class UserProvider with ChangeNotifier {
               ? double.parse(prefs.getString('$appName' + '_' + "long"))
               : 0.0;
         } else {
-
+          print("user");
           userName = prefs.getString('$appName' + '_' + "name");
           userPhone = prefs.getString('$appName' + '_' + "phone");
           userId = prefs.getInt('$appName' + '_' + "id");
@@ -454,11 +490,12 @@ class UserProvider with ChangeNotifier {
           gender = prefs.getString('$appName' + '_' + "gender").toString();
           token = prefs.getString('$appName' + '_' + "token");
         }
-
+        print(token);
+        print(type);
       }
     }
     // _expire = DateTime.parse(prefs.getString('$appName' + '_' + "expire"));
-    _approval =int.parse( prefs.getString('$appName' + '_' + "approval"));
+    _approval = prefs.getInt('$appName' + '_' + "approval");
     _loginType = prefs.getString('$appName' + '_' + "type");
 
     notifyListeners();
@@ -473,9 +510,7 @@ class UserProvider with ChangeNotifier {
       var data = json.decode(response.body);
       var myData = Subscrpion.fromJson(data);
       var subList = myData.subscriptions;
-
-
-
+      print(': ${subList.toString()}');
 
       return subList;
     } catch (e) {
@@ -500,7 +535,9 @@ class UserProvider with ChangeNotifier {
       // prefs.getString('$appName' + '_' + "expire");
       // _expire = DateTime.parse(data['user']['expaer']);
 
-
+      print(
+          '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111${response.body}');
+      // print(_expire);
     } catch (e) {
       print('e: $e');
     }
