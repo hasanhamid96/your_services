@@ -7,7 +7,6 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
-import 'package:your_services/model/subscrption.dart';
 import 'package:your_services/providers/cities.dart';
 import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/person_works.dart';
@@ -36,6 +35,7 @@ void main() async {
       .setInFocusDisplayType(OSNotificationDisplayType.notification);
   await OneSignal.shared
       .promptUserForPushNotificationPermission(fallbackToSettings: true);
+
   runApp(MyApp());
 }
 
@@ -142,18 +142,25 @@ class _SplashScreenState extends State<SplashScreen> {
   ChewieController _chewieController;
   var chewieController;
   var sub;
-  var subId;
-
+  var id;
+  int status;
   @override
   void initState() {
     super.initState();
     final userPro = Provider.of<UserProvider>(context, listen: false);
-
+    userPro.settings().then((value) {
+      setState(() {
+        status = value;
+        print('statusstatus $status');
+      });
+    });
     userPro.checkLogin();
     initializePlayer(userPro);
   }
 
   Future<void> initializePlayer(userPro) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var subId = prefs.getString('$appName' + '_' + "subId");
     _controller = VideoPlayerController.asset('assets/images/sss.mp4');
     await Future.wait(
       [
@@ -162,19 +169,28 @@ class _SplashScreenState extends State<SplashScreen> {
                 () {
                   //custom Listner
                   setState(() {
+                    id = subId;
                     if (_controller.value.duration ==
                         _controller.value.position) {
                       print(
                           'video compeleteeed'); //checking the duration and position every time
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => (UserProvider.token != null &&
-                                  userPro.loginType == 'provider' &&
-                                  userPro.approval == 0)
-                              ? WatingApprovelScreen()
-                              : UserProvider.token == null
-                                  ? StartScreen()
-                                  : BottomNavBar(),
+                          builder: (context) => status == 1
+                              ? BottomNavBar()
+                              : (UserProvider.token != null &&
+                                      userPro.loginType == 'provider' &&
+                                      subId != null &&
+                                      userPro.approval == 0)
+                                  ? WatingApprovelScreen()
+                                  : (UserProvider.token != null &&
+                                          userPro.loginType == 'provider' &&
+                                          subId == null &&
+                                          userPro.approval == 0)
+                                      ? subscrptionsScreen()
+                                      : UserProvider.token == null
+                                          ? StartScreen()
+                                          : BottomNavBar(),
                         ),
                       );
                       setState(
@@ -260,13 +276,21 @@ class _SplashScreenState extends State<SplashScreen> {
                   // Navigator.of(context).pushReplacementNamed('ss');
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => (UserProvider.token != null &&
-                              userPro.loginType == 'provider' &&
-                              userPro.approval == 0)
-                          ? WatingApprovelScreen()
-                          : UserProvider.token == null
-                              ? StartScreen()
-                              : BottomNavBar(),
+                      builder: (context) => status == 1
+                          ? BottomNavBar()
+                          : (UserProvider.token != null &&
+                                  userPro.loginType == 'provider' &&
+                                  id != null &&
+                                  userPro.approval == 0)
+                              ? WatingApprovelScreen()
+                              : (UserProvider.token != null &&
+                                      userPro.loginType == 'provider' &&
+                                      id == null &&
+                                      userPro.approval == 0)
+                                  ? subscrptionsScreen()
+                                  : UserProvider.token == null
+                                      ? StartScreen()
+                                      : BottomNavBar(),
                     ),
                   );
                 },

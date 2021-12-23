@@ -15,6 +15,7 @@ import 'package:your_services/model/section.dart';
 import 'package:your_services/providers/cities.dart';
 import 'package:your_services/providers/sections.dart';
 import 'package:your_services/providers/user.dart';
+import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/screens/auth/subscription.dart';
 import 'package:your_services/screens/auth/waiting_Approvel_screen.dart';
 import 'package:your_services/widgets/curvePainter.dart';
@@ -921,11 +922,16 @@ class _LogScreenState extends State<LogScreen> {
               // }),
               if (!isLogin)
                 CupertinoButton(
-                    child: Text(isUser ? ' زبون' : ' مقدم الخدمة',
+                    child: Text('لديك حساب؟',
                         style: Theme.of(context).textTheme.bodyText1),
                     onPressed: () {
                       setState(() {
                         isUser = !isUser;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => StartScreen(),
+                          ),
+                        );
                       });
                     }),
             ],

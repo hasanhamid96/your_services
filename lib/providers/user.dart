@@ -543,4 +543,29 @@ class UserProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<int> settings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      var response = await http.get(
+        Uri.parse('https://urservices.creativeapps.me/api/settings'),
+        headers: {'Authorization': '$token', 'Accept': 'application/json'},
+      );
+
+      print('settingssettingssettingssettings${response.body}');
+      // print(_expire);
+      var data = json.decode(response.body);
+      print(data["settings"][0]["status"]);
+
+      if (data["settings"][0]["status"] == 0) {
+        return 0;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      print('settings error: $e');
+    }
+    notifyListeners();
+  }
 }
