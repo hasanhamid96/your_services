@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:your_services/providers/user.dart';
 import 'package:your_services/screens/auth/LogScreen.dart';
+import 'package:your_services/screens/auth/startScreen.dart';
 import 'package:your_services/screens/bottomScreens/main_screen.dart';
 import 'package:your_services/screens/bottomScreens/settingScreen.dart';
 import '../works/works_screen_list.dart';
@@ -91,7 +92,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                             isDismissible: true,
                             builder: (context) {
                               if (UserProvider.token == null)
-                                return LogScreen();
+                                return StartScreen();
                               return WorksScreenList();
                             });
                     },
